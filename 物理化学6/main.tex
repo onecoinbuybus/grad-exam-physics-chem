@@ -1,4 +1,4 @@
-% !TEX program = xelatex
+% !TEX program = lualatex
 \documentclass[aspectratio=169, 12pt]{beamer}
 
 % ===== Theme =====
@@ -8,11 +8,9 @@
 \setbeamertemplate{footline}[frame number]
 \setbeamerfont{frametitle}{size=\Large, series=\bfseries}
 
-% ===== Japanese support (Overleaf: use xelatex or lualatex) =====
-\usepackage{xeCJK}
-\setCJKmainfont{IPAexMincho}[BoldFont=IPAexGothic]
-\setCJKsansfont{IPAexGothic}
-\setCJKmonofont{IPAexGothic}
+% ===== Japanese support (Overleaf: use lualatex) =====
+\usepackage{luatexja}
+\usepackage[haranoaji]{luatexja-preset}
 
 % ===== Packages =====
 \usepackage{amsmath, amssymb, mathtools}
@@ -28,7 +26,7 @@
 \definecolor{alertred}{RGB}{192,57,43}
 
 % ===== Custom commands =====
-\newcommand{\hbar}{\hslash}
+% \hbar is already defined by physics package
 \newcommand{\highlight}[1]{\colorbox{yellow!30}{$\displaystyle #1$}}
 \newcommand{\importantbox}[1]{%
   \begin{center}
