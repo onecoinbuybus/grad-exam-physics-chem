@@ -1,12 +1,11 @@
 % Overleaf: Menu → Compiler → LuaLaTeX に設定してください
 \documentclass[aspectratio=169, 12pt]{beamer}
 
-% ===== Theme =====
-\usetheme{Madrid}
-\usecolortheme{whale}
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}[frame number]
-\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+% ===== Metropolis Theme =====
+\usetheme[progressbar=frametitle, numbering=fraction, block=fill]{metropolis}
+\setbeamercolor{frametitle}{bg=darkblue}
+\setbeamercolor{progress bar}{fg=accent}
+\setbeamercolor{alerted text}{fg=alertred}
 
 % ===== Japanese support =====
 \usepackage{luatexja}
@@ -14,16 +13,20 @@
 
 % ===== Packages =====
 \usepackage{amsmath, amssymb, mathtools}
-\usepackage{physics}  % \bra, \ket, \dv, \pdv
+\usepackage{physics}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, decorations.pathmorphing, patterns}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{appendixnumberbeamer}
 
 % ===== Custom colors =====
 \definecolor{accent}{RGB}{230,126,34}
 \definecolor{darkblue}{RGB}{39,99,165}
 \definecolor{alertred}{RGB}{192,57,43}
+\definecolor{mDarkTeal}{RGB}{23,67,88}
+
+\setbeamercolor{normal text}{fg=mDarkTeal}
 
 % ===== Custom commands =====
 % \hbar is already defined by physics package
@@ -37,15 +40,14 @@
 % ===== Title =====
 \title{物理化学 6}
 \subtitle{量子化学の基礎}
-\author{}
+\author{大学院入試 備考資料}
 \date{}
+\institute{化学システム工学専攻}
 
 \begin{document}
 
 % ============================================================
-\begin{frame}
-\titlepage
-\end{frame}
+\maketitle
 
 % ============================================================
 \begin{frame}{目 次}
@@ -617,6 +619,11 @@ $E_1 \approx 0$ → エネルギー準位が事実上連続 → \textbf{古典�
   \item \textbf{\color{alertred}入試対策ポイント}\\
     変数分離法の手順，境界条件の適用，規格化計算ができること
 \end{enumerate}
+\end{frame}
+
+% ============================================================
+\begin{frame}[standout]
+  頑張れ！
 \end{frame}
 
 \end{document}
