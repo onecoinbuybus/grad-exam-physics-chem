@@ -1,0 +1,624 @@
+% !TEX program = xelatex
+\documentclass[aspectratio=169, 12pt]{beamer}
+
+% ===== Theme =====
+\usetheme{Madrid}
+\usecolortheme{whale}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+
+% ===== Japanese support (Overleaf: use xelatex or lualatex) =====
+\usepackage{xeCJK}
+\setCJKmainfont{IPAexMincho}[BoldFont=IPAexGothic]
+\setCJKsansfont{IPAexGothic}
+\setCJKmonofont{IPAexGothic}
+
+% ===== Packages =====
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{physics}  % \bra, \ket, \dv, \pdv
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, patterns}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+% ===== Custom colors =====
+\definecolor{accent}{RGB}{230,126,34}
+\definecolor{darkblue}{RGB}{39,99,165}
+\definecolor{alertred}{RGB}{192,57,43}
+
+% ===== Custom commands =====
+\newcommand{\hbar}{\hslash}
+\newcommand{\highlight}[1]{\colorbox{yellow!30}{$\displaystyle #1$}}
+\newcommand{\importantbox}[1]{%
+  \begin{center}
+  \fcolorbox{darkblue}{blue!5}{\parbox{0.85\textwidth}{\centering #1}}
+  \end{center}
+}
+
+% ===== Title =====
+\title{物理化学 6}
+\subtitle{量子化学の基礎}
+\author{}
+\date{}
+
+\begin{document}
+
+% ============================================================
+\begin{frame}
+\titlepage
+\end{frame}
+
+% ============================================================
+\begin{frame}{目 次}
+\tableofcontents
+\end{frame}
+
+\section{量子論の誕生}
+
+% ============================================================
+\begin{frame}{古典論の破綻：黒体放射の紫外破綻}
+
+\textbf{古典論（Rayleigh--Jeans）の予測：}
+\[
+  \rho(\lambda, T) = \frac{8\pi k_\mathrm{B} T}{\lambda^4}
+  \quad \xrightarrow{\lambda \to 0} \quad \rho \to \infty \quad \text{（紫外破綻！）}
+\]
+
+\textbf{実験事実：} 短波長側では $\rho$ は $0$ に収束する。
+
+\vspace{0.5em}
+\textbf{\color{accent}Planck の解決策（1900年）：}
+
+\importantbox{
+  電磁波のエネルギーは振動数に比例し，\textbf{不連続}に変化する。
+  \[
+    E = nh\nu \qquad (n = 1, 2, 3, \ldots)
+  \]
+}
+
+$h = 6.626 \times 10^{-34}$ J$\cdot$s（Planck定数），$\nu$：振動数 [Hz]
+
+\vspace{0.3em}
+{\small\color{alertred} ※ 2024年度 第2問で黒体放射のプランク分布が出題されている！}
+\end{frame}
+
+% ============================================================
+\begin{frame}{光電効果：光の粒子性の証拠}
+
+\textbf{Einstein (1905)：} 光は $h\nu$ のエネルギーを持つ粒子（\textbf{光子}）である。
+
+\[
+  E_\text{photon} = h\nu, \qquad E_\text{kinetic} = h\nu - W
+\]
+$W$：仕事関数（金属から電子を取り出すのに必要なエネルギー）
+
+\vspace{1em}
+\textbf{\color{accent}重要なポイント：}
+\begin{itemize}
+  \item 光の強度を上げても，$\nu$ が閾値以下なら電子は放出されない
+  \item 古典的波動論では説明不可能 → \textbf{光の粒子性}
+\end{itemize}
+
+\vspace{0.5em}
+\importantbox{
+  \textbf{波動性}（干渉・回折）と\textbf{粒子性}（光電効果）の\textbf{二重性}
+}
+
+{\small\color{alertred} ※ 2024年度 第2問(1)で水の光分解の最大波長が出題（$E = hc/\lambda$）}
+\end{frame}
+
+% ============================================================
+\begin{frame}{粒子の波動性：ド・ブロイ波（物質波）}
+
+\textbf{ド・ブロイの仮説 (1924)：}
+
+電磁波が波動性と粒子性を兼ね備えるなら，\\
+\textbf{粒子も波動性を持つ}のではないか。
+
+\vspace{1em}
+\importantbox{
+  振動数：$\displaystyle \nu = \frac{E}{h}$ \qquad
+  \textbf{ド・ブロイ波長}：$\displaystyle \lambda = \frac{h}{p} = \frac{h}{mv}$
+}
+
+\vspace{0.5em}
+\begin{itemize}
+  \item $p = mv$：運動量
+  \item 電子線回折実験 (Davisson--Germer, 1927) で実証された
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{\color{darkblue}歴史の流れ：}
+\[
+  \underbrace{\text{Planck}}_{\text{1900}} \to
+  \underbrace{\text{Einstein}}_{\text{1905}} \to
+  \underbrace{\text{de Broglie}}_{\text{1924}} \to
+  \underbrace{\text{Schrödinger}}_{\text{1926}}
+\]
+\end{frame}
+
+\section{Schrödinger方程式}
+
+% ============================================================
+\begin{frame}{Schrödinger 方程式の導出}
+
+\textbf{平面波の波動関数：}
+\[
+  \Psi(x,t) = A \exp\!\left[2\pi i\!\left(\frac{x}{\highlight{\lambda}} - \highlight{\nu}t\right)\right]
+\]
+
+\textbf{オイラーの公式：} $e^{i\theta} = \cos\theta + i\sin\theta$
+
+\vspace{0.5em}
+$\lambda = h/p = 2\pi\hbar/p$，\quad $E = h\nu$ を代入すると：
+
+\importantbox{
+  $\displaystyle \Psi(x,t) = A \exp\!\left[\frac{i}{\hbar}(px - Et)\right]$
+}
+
+$\hbar \equiv h/(2\pi)$：ディラック定数（換算プランク定数）
+\end{frame}
+
+% ============================================================
+\begin{frame}{演算子と固有値}
+
+$\Psi(x,t) = A\exp\!\bigl[\frac{i}{\hbar}(px - Et)\bigr]$ を偏微分すると：
+
+\vspace{0.5em}
+\begin{align}
+  \frac{\hbar}{i}\frac{\partial}{\partial x}\Psi &= p\,\Psi
+    & \Longrightarrow \quad & \hat{p} = \frac{\hbar}{i}\frac{\partial}{\partial x} = -i\hbar\frac{\partial}{\partial x} \\[8pt]
+  -\frac{\hbar}{i}\frac{\partial}{\partial t}\Psi &= E\,\Psi
+    & \Longrightarrow \quad & \hat{E} = i\hbar\frac{\partial}{\partial t}
+\end{align}
+
+\vspace{0.5em}
+古典的エネルギー $E = \dfrac{p^2}{2m} + V(x)$ に演算子を代入：
+
+\importantbox{
+  \textbf{時間依存 Schrödinger 方程式}
+  \[
+    \left[-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2} + V(x)\right]\Psi(x,t)
+    = i\hbar\frac{\partial}{\partial t}\Psi(x,t)
+  \]
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{三次元への拡張とハミルトニアン}
+
+\textbf{三次元 Schrödinger 方程式：}
+\[
+  -\frac{\hbar^2}{2m}\left[\frac{\partial^2}{\partial x^2}
+  + \frac{\partial^2}{\partial y^2}
+  + \frac{\partial^2}{\partial z^2}\right]\Psi + V\Psi
+  = i\hbar\frac{\partial}{\partial t}\Psi
+\]
+
+ラプラシアン：
+$\displaystyle \Delta \equiv \nabla^2
+= \frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}$
+
+\vspace{0.8em}
+\importantbox{
+  $\hat{H}\Psi = i\hbar\dfrac{\partial}{\partial t}\Psi$
+  \qquad
+  $\hat{H} = -\dfrac{\hbar^2}{2m}\nabla^2 + V$ \quad（\textbf{ハミルトニアン}）
+}
+
+\vspace{0.5em}
+$\hat{H}$ は系の全エネルギー（運動エネルギー＋ポテンシャルエネルギー）に\\
+対応する演算子である。
+\end{frame}
+
+% ============================================================
+\begin{frame}{時間に依存しない Schrödinger 方程式}
+
+\textbf{変数分離：} $\Psi(x,t) = \Phi(x)\cdot T(t)$ を代入して整理すると：
+\[
+  \underbrace{\frac{1}{\Phi(x)}\left(-\frac{\hbar^2}{2m}\frac{d^2\Phi}{dx^2} + V\Phi\right)}_{\text{$x$のみの関数}}
+  = \underbrace{\frac{1}{T(t)}\,i\hbar\frac{dT}{dt}}_{\text{$t$のみの関数}}
+  = E \quad (\text{定数})
+\]
+
+\vspace{0.5em}
+\textbf{\color{darkblue}空間部分（固有値方程式）：}
+\importantbox{
+  $\displaystyle \left(-\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + V(x)\right)\Phi(x) = E\,\Phi(x)$
+  \quad ← \textbf{時間に依存しないSchrödinger方程式}
+}
+
+\textbf{時間部分：}
+$\displaystyle i\hbar\frac{dT}{dt} = ET \;\Longrightarrow\; T(t) = e^{-iEt/\hbar}$
+
+\vspace{0.3em}
+\textbf{全体：} $\Psi(x,t) = \Phi(x)\,e^{-iEt/\hbar}$
+\end{frame}
+
+\section{数学基礎：変数分離法}
+
+% ============================================================
+\begin{frame}{数学基礎：二階偏微分方程式}
+
+Schrödinger方程式も二階偏微分方程式の一種である。\\
+解法の本質を理解するために，まず\textbf{波動方程式}を例に「変数分離法」を学ぶ。
+
+\vspace{0.5em}
+\textbf{波動方程式（弦の振動）：}
+\[
+  \frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}, \quad (0 < x < 1)
+\]
+
+\textbf{\color{accent}解法の流れ：}
+\begin{enumerate}
+  \item 変数分離 $u(x,t) = f(x)\cdot g(t)$ と置く
+  \item 二つの常微分方程式に分離
+  \item 境界条件を適用 → 解の形が決まる（$\sin$, $\cos$）
+  \item 固有値（許される $\lambda$ の値）が\textbf{離散的}に決まる
+\end{enumerate}
+
+{\color{alertred}\textbf{→ Schrödinger方程式でも全く同じ手順を用いる！}}
+\end{frame}
+
+% ============================================================
+\begin{frame}{変数分離法の要点}
+
+$u(x,t) = f(x)\cdot g(t)$ を代入し，両辺を $f(x)g(t)$ で割ると：
+\[
+  \frac{1}{c^2 g(t)}\frac{\partial^2 g}{\partial t^2}
+  = \frac{1}{f(x)}\frac{\partial^2 f}{\partial x^2}
+  = \lambda \quad (\text{定数})
+\]
+
+$x$ 部分のみ取り出すと：\quad $\dfrac{d^2 f}{dx^2} = \lambda f(x)$
+
+\vspace{0.5em}
+\textbf{\color{accent}$\lambda$ の符号で解の形が変わる：}
+
+\begin{description}
+  \item[\color{alertred}$\lambda > 0$] $f = Ce^{\sqrt{\lambda}\,x} + De^{-\sqrt{\lambda}\,x}$ \quad（指数関数 → 発散，\textbf{不適}）
+  \item[\color{alertred}$\lambda = 0$] $f = Cx + D$ \quad（直線 → 境界条件で自明解のみ，\textbf{不適}）
+  \item[\color{darkblue}$\lambda < 0$] $f = C\cos(\sqrt{|\lambda|}\,x) + D\sin(\sqrt{|\lambda|}\,x)$ \quad {\color{darkblue}\textbf{← 正しい解}}
+\end{description}
+
+\vspace{0.3em}
+境界条件 $f(0) = 0$, $f(1) = 0$ を適用：
+\[
+  \boxed{f(x) = D\sin(n\pi x), \quad n = 1, 2, 3, \ldots}
+\]
+\end{frame}
+
+\section{井戸型ポテンシャル}
+
+% ============================================================
+\begin{frame}{井戸型ポテンシャル（Particle in a Box）}
+
+\begin{columns}[c]
+\begin{column}{0.45\textwidth}
+  \begin{tikzpicture}[scale=0.9]
+    % walls
+    \fill[pattern=north east lines, pattern color=gray] (-0.5,0) rectangle (0,3);
+    \fill[pattern=north east lines, pattern color=gray] (4,0) rectangle (4.5,3);
+    % potential
+    \draw[very thick] (0,3) -- (0,0) -- (4,0) -- (4,3);
+    % fill inside
+    \fill[yellow!30, opacity=0.5] (0,0) rectangle (4,3);
+    % labels
+    \node[below] at (0,-0.2) {$-L$};
+    \node[below] at (4,-0.2) {$L$};
+    \node[below] at (2,-0.2) {$0$};
+    \node at (2,1.5) {$V = 0$};
+    \node at (-1.2,1.5) {$V = \infty$};
+    \node at (5.2,1.5) {$V = \infty$};
+    % axis
+    \draw[->] (-1.5,0) -- (5.5,0) node[right] {$x$};
+    \draw[->] (0,-0.5) -- (0,3.5) node[above] {$V(x)$};
+  \end{tikzpicture}
+\end{column}
+\begin{column}{0.55\textwidth}
+  \[
+    V(x) = \begin{cases} 0 & (-L \leq x \leq L) \\ \infty & (x < -L,\; L < x) \end{cases}
+  \]
+
+  \vspace{0.5em}
+  \textbf{物理的意味：}
+  \begin{itemize}
+    \item 箱の中のみ粒子が存在
+    \item 壁の外：$f(x) = 0$（存在確率ゼロ）
+  \end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{0.5em}
+時間に依存しないSchrödinger方程式に $V = 0$ を代入：
+\[
+  -\frac{\hbar^2}{2m}\frac{d^2 f}{dx^2} = Ef(x)
+  \quad \Longrightarrow \quad
+  \frac{d^2 f}{dx^2} = -k^2 f(x), \quad k = \sqrt{\frac{2mE}{\hbar^2}}
+\]
+
+{\small\color{accent} 数学基礎で学んだ $d^2f/dx^2 = \lambda f$ と同じ形！（$\lambda = -k^2 < 0$）}
+\end{frame}
+
+% ============================================================
+\begin{frame}{定常状態の解}
+
+$\dfrac{d^2 f}{dx^2} = -k^2 f(x)$ の一般解：
+
+\[
+  f(x) = A\cos(kx) + B\sin(kx)
+\]
+
+\textbf{\color{accent}境界条件を適用：}
+\begin{align}
+  f(-L) &= A\cos(kL) - B\sin(kL) = 0 \\
+  f(+L) &= A\cos(kL) + B\sin(kL) = 0
+\end{align}
+
+2式を足す：$2A\cos(kL) = 0$ → $A = 0$ または $\cos(kL) = 0$
+
+2式を引く：$2B\sin(kL) = 0$ → $B = 0$ または $\sin(kL) = 0$
+
+\vspace{0.5em}
+{\color{alertred}$A$ と $B$ が同時にゼロ → $f = 0$（粒子が存在しない）→ 不適}
+
+\vspace{0.3em}
+→ \textbf{2つの場合}に分かれる
+\end{frame}
+
+% ============================================================
+\begin{frame}{境界条件による量子化}
+
+\textbf{\color{darkblue}【場合1】$A \neq 0,\; B = 0$} のとき：$\cos(kL) = 0$
+\[
+  kL = n\frac{\pi}{2}, \quad n = 1, 3, 5, \ldots \quad \Longrightarrow \quad f_n(x) = A\cos(kx)
+\]
+
+\textbf{\color{darkblue}【場合2】$A = 0,\; B \neq 0$} のとき：$\sin(kL) = 0$
+\[
+  kL = n\frac{\pi}{2}, \quad n = 2, 4, 6, \ldots \quad \Longrightarrow \quad f_n(x) = B\sin(kx)
+\]
+
+\importantbox{
+  まとめ：$\displaystyle k = \frac{n\pi}{2L}, \quad n = 1, 2, 3, \ldots$
+
+  \vspace{0.3em}
+  $n$ = 奇数 → $f_n(x) = A\cos\!\left(\dfrac{n\pi}{2L}x\right)$ \quad（偶関数）
+
+  \vspace{0.2em}
+  $n$ = 偶数 → $f_n(x) = B\sin\!\left(\dfrac{n\pi}{2L}x\right)$ \quad（奇関数）
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{規格化条件}
+
+波動関数は規格化されなければならない（確率の総和 $= 1$）：
+\[
+  \int_{-L}^{L} |f_n(x)|^2\,dx = 1
+\]
+
+$\cos$ の場合：
+\[
+  \int_{-L}^{L} A^2 \cos^2\!\left(\frac{n\pi}{2L}x\right)dx
+  = 2A^2 \int_{0}^{L} \frac{1 + \cos\!\left(\frac{n\pi}{L}x\right)}{2}\,dx
+  = A^2 L = 1
+\]
+\[
+  \therefore \quad A = \frac{1}{\sqrt{L}}, \qquad B = \frac{1}{\sqrt{L}} \quad (\text{同様})
+\]
+
+\importantbox{
+  \textbf{規格化された波動関数：}
+  \[
+    f_n(x) = \begin{cases}
+      \dfrac{1}{\sqrt{L}}\cos\!\left(\dfrac{n\pi}{2L}x\right) & (n = \text{奇数}) \\[8pt]
+      \dfrac{1}{\sqrt{L}}\sin\!\left(\dfrac{n\pi}{2L}x\right) & (n = \text{偶数})
+    \end{cases}
+  \]
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{エネルギー固有値}
+
+$k = \sqrt{2mE/\hbar^2} = n\pi/(2L)$ から：
+
+\importantbox{
+  \[
+    \boxed{E_n = \frac{n^2 \pi^2 \hbar^2}{8mL^2}, \qquad n = 1, 2, 3, \ldots}
+  \]
+}
+
+\vspace{0.5em}
+\textbf{\color{alertred}重要な結論：}
+\begin{enumerate}
+  \item エネルギーは\textbf{離散的}（量子化されている）\\
+    → $n = 1, 2, 3, \ldots$ の整数値のみ許される
+  \item $n = 0$ は許されない（$f(x) = 0$ → 粒子不存在）
+  \item $E_n \propto n^2$，$E_n \propto 1/m$，$E_n \propto 1/L^2$\\
+    → \textbf{軽い粒子}ほど，\textbf{狭い箱}ほどエネルギー間隔が大きい
+\end{enumerate}
+\end{frame}
+
+\section{物理的意味と応用}
+
+% ============================================================
+\begin{frame}{零点エネルギー}
+
+最低エネルギー状態（基底状態）は $n = 1$：
+\[
+  E_1 = \frac{\pi^2\hbar^2}{8mL^2} \neq 0
+\]
+
+\textbf{\color{alertred}古典力学との根本的な違い：}
+\begin{center}
+\begin{tabular}{lcc}
+  \toprule
+  & 古典力学 & 量子力学 \\
+  \midrule
+  最低エネルギー & $E = 0$（静止可能） & $E_1 > 0$（静止不可能） \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\textbf{\color{accent}物理的理由：Heisenbergの不確定性原理}
+\[
+  \Delta x \cdot \Delta p \geq \frac{\hbar}{2}
+\]
+箱に閉じ込め → $\Delta x \leq 2L$ → $\Delta p \geq \hbar/(4L)$\\
+→ 運動量がゼロにならない → エネルギーもゼロにならない
+
+\vspace{0.3em}
+{\small\color{alertred} ※ 試験頻出：「零点エネルギーが存在する理由を説明せよ」}
+\end{frame}
+
+% ============================================================
+\begin{frame}{波動関数の物理的意味：Bornの確率解釈}
+
+波動関数 $\Psi(x,t)$ 自体には直接の物理的意味はない。
+
+\importantbox{
+  $|\Psi(x,t)|^2\,dx$ = 位置 $x$ 〜 $x + dx$ に粒子を見出す\textbf{確率}
+}
+
+\textbf{\color{accent}波動関数の条件：}
+\begin{enumerate}
+  \item \textbf{規格化：} $\int_{-\infty}^{\infty}|\Psi|^2\,dx = 1$
+  \item \textbf{連続：} $\Psi(x)$ は連続関数
+  \item \textbf{一価：} 各点で一つの値
+  \item \textbf{有界：} $\Psi(x)$ は有限
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{井戸の中の粒子：}
+\begin{itemize}
+  \item $n=1$：中央に最も存在しやすい（$\cos^2$の形）
+  \item $n=2$：中央では存在確率 $= 0$（\textbf{節}がある！）
+  \item 節の数 $= n - 1$ 個
+\end{itemize}
+\end{frame}
+
+% ============================================================
+\begin{frame}{エネルギー準位と波動関数}
+
+\begin{columns}[c]
+\begin{column}{0.4\textwidth}
+  \textbf{エネルギー準位：}
+  \[
+    E_n = n^2 E_1
+  \]
+  \begin{tikzpicture}[scale=0.7]
+    % Energy levels
+    \foreach \n/\y/\label in {1/1/E_1, 2/4/4E_1, 3/9/9E_1, 4/16/16E_1} {
+      \draw[thick, darkblue] (0,\y*0.25) -- (3,\y*0.25);
+      \node[left] at (-0.1,\y*0.25) {\small $n=\n$};
+      \node[right] at (3.1,\y*0.25) {\small $\label$};
+    }
+    % arrows
+    \draw[->] (-0.5,0) -- (-0.5,4.5) node[above] {\small $E$};
+    % ground state label
+    \node[right, alertred] at (3.1,0.25) {\small ← 基底状態};
+  \end{tikzpicture}
+\end{column}
+\begin{column}{0.6\textwidth}
+  \textbf{波動関数の形：}
+
+  \vspace{0.3em}
+  \begin{tabular}{cccc}
+    \toprule
+    $n$ & 関数 & 対称性 & 節の数 \\
+    \midrule
+    1 & $\cos(\pi x/2L)$ & 偶 & 0 \\
+    2 & $\sin(\pi x/L)$ & 奇 & 1 \\
+    3 & $\cos(3\pi x/2L)$ & 偶 & 2 \\
+    4 & $\sin(2\pi x/L)$ & 奇 & 3 \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.8em}
+  \textbf{規則：}
+  \begin{itemize}
+    \item 節の数 $= n - 1$
+    \item $E_{n+1} - E_n = (2n+1)E_1$\\
+      → $n$ が大きいほど間隔が広がる
+  \end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{対応原理と古典極限}
+
+\textbf{\color{darkblue}対応原理（Bohr）：}\\
+量子数 $n \to \infty$ のとき，量子力学の結果は古典力学に一致する。
+
+\vspace{0.8em}
+\textbf{\color{accent}井戸型ポテンシャルでの確認：}
+\begin{itemize}
+  \item $n = 1$：$|f_1|^2$ は中央で最大 → 古典力学と異なる
+  \item $n \to \infty$：$|f_n|^2$ の振動が細かくなり，平均すると\textbf{一様分布} → 古典的！
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{エネルギー間隔：}
+\[
+  \frac{\Delta E}{E_n} = \frac{(2n+1)E_1}{n^2 E_1} = \frac{2n+1}{n^2}
+  \xrightarrow{n \to \infty} 0 \quad \text{（連続的）}
+\]
+
+\textbf{マクロな物体}（$m$ が大きい，$L$ が大きい）：\\
+$E_1 \approx 0$ → エネルギー準位が事実上連続 → \textbf{古典力学と一致}
+\end{frame}
+
+% ============================================================
+\begin{frame}{応用：共役ポリエンの$\pi$電子モデル}
+
+共役ポリエン（ブタジエン，ヘキサトリエン等）の$\pi$電子を\\
+「\textbf{1次元の箱の中の粒子}」として近似できる。
+
+\vspace{0.5em}
+\begin{itemize}
+  \item 箱の長さ $L \approx$ 結合数 $\times$ 結合長
+  \item 各$\pi$電子は $E_n$ の準位を低い方から詰める（Pauli原理）
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{\color{accent}HOMO--LUMO 遷移のエネルギー：}
+\[
+  \Delta E = E_{n+1} - E_n = \frac{(2n+1)\pi^2\hbar^2}{8mL^2}
+  \qquad \lambda_\text{abs} = \frac{hc}{\Delta E}
+\]
+
+\importantbox{
+  共役が長くなると $L$ が増大 → $\Delta E$ が減少 → $\lambda$ が\textbf{赤方偏移}
+}
+
+{\small\color{alertred} ※ 2021年度 第2問 II で共役ポリエンの particle-in-a-box が出題！}
+\end{frame}
+
+% ============================================================
+\begin{frame}{まとめ}
+
+\begin{enumerate}
+  \item \textbf{\color{darkblue}量子論の出発点}\\
+    Planck: $E = nh\nu$ → Einstein: 光電効果 → de Broglie: $\lambda = h/p$
+
+  \item \textbf{\color{darkblue}Schrödinger 方程式}\\
+    $\hat{H}\Psi = i\hbar\dfrac{\partial}{\partial t}\Psi$
+    \quad → \quad $\hat{H}\Phi = E\Phi$（時間非依存）
+
+  \item \textbf{\color{darkblue}井戸型ポテンシャルの解}\\
+    $E_n = n^2\pi^2\hbar^2/(8mL^2)$，波動関数は $\sin/\cos$
+
+  \item \textbf{\color{darkblue}量子力学の本質}\\
+    エネルギーの量子化，零点エネルギー，確率解釈
+
+  \item \textbf{\color{alertred}入試対策ポイント}\\
+    変数分離法の手順，境界条件の適用，規格化計算ができること
+\end{enumerate}
+\end{frame}
+
+\end{document}
