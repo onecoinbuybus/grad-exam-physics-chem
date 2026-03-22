@@ -24,9 +24,9 @@
 \usepackage{graphicx}
 \usepackage{siunitx}
 \usepackage{appendixnumberbeamer}
-\usepackage{enumitem}
-\setlist[itemize]{itemsep=0.2em, topsep=0.3em}
-\setlist[enumerate]{itemsep=0.2em, topsep=0.3em}
+% Compress Beamer list spacing (enumitem conflicts with Beamer)
+\setbeamertemplate{itemize/enumerate body begin}{\vspace{-0.3em}}
+\setbeamertemplate{itemize/enumerate body end}{\vspace{-0.2em}}
 
 % ===== Custom colors =====
 \definecolor{accent}{RGB}{230,126,34}
