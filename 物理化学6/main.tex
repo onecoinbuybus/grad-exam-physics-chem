@@ -76,9 +76,10 @@
 \begin{enumerate}
   \item なぜ古典力学ではダメなのか？（量子論の誕生）
   \item Schrödinger方程式はどこから来るのか？
-  \item どうやって解くのか？（変数分離法）
-  \item 最も簡単な例で解いてみよう（井戸型ポテンシャル）
-  \item 解から何が分かるのか？（物理的意味と応用）
+  \item どうやって解くのか？（変数分離法 → 井戸型ポテンシャル）
+  \item 解の物理的意味と応用（共役ポリエン）
+  \item もう一つの重要な例：分子振動（調和振動子・Morse）
+  \item 黒体放射の定量的取り扱い（Wien則・Stefan-Boltzmann則）
 \end{enumerate}
 \end{frame}
 
@@ -805,6 +806,225 @@ $\lambda = hc/\Delta E \approx \SI{117}{nm}$\\
 \end{frame}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{もう一つの重要な例：分子振動}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{箱の次は「ばね」：調和振動子}
+
+\teacher{井戸型ポテンシャルの次に大事なのが，\textbf{分子の振動}です。\\
+二原子分子の結合を「ばね」と見なすと，調和振動子になります。}
+
+\vspace{0.3em}
+\textbf{ポテンシャル：}
+\[
+  V^\text{H} = \frac{1}{2}k(R - R_e)^2 = \frac{1}{2}kx^2
+\]
+{\small $k$：ばね定数，$R_e$：平衡結合距離，$x = R - R_e$：変位}
+
+\vspace{0.3em}
+\textbf{時間に依存しないSchrödinger方程式：}
+\[
+  -\frac{\hbar^2}{2\mu}\frac{d^2\psi}{dx^2} + \frac{1}{2}kx^2\psi = E\psi
+\]
+{\small $\mu$：\textbf{換算質量}（reduced mass）$= m_1 m_2/(m_1 + m_2)$}
+
+\vspace{0.3em}
+\teacher{井戸型と違って$V(x)$が$x^2$に比例するので，解はもっと複雑になります。\\
+でも結果はとてもシンプルです。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{調和振動子のエネルギー準位}
+
+\begin{columns}[c]
+\begin{column}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{figures/harmonic_oscillator.png}
+\end{column}
+\begin{column}{0.55\textwidth}
+\importantbox{
+  \[
+    E_n = \left(n + \frac{1}{2}\right)\hbar\omega, \quad n = 0, 1, 2, \ldots
+  \]
+  $\omega = \sqrt{k/\mu}$：角振動数
+}
+
+\vspace{0.3em}
+\textbf{井戸型ポテンシャルとの比較：}
+
+\begin{tabular}{lcc}
+  \toprule
+  & 井戸型 & 調和振動子 \\
+  \midrule
+  $E_n$ & $\propto n^2$ & $\propto n$ \\
+  間隔 & 不均一 & \alert{等間隔} $\hbar\omega$ \\
+  零点E & $E_1 \neq 0$ & $E_0 = \frac{1}{2}\hbar\omega \neq 0$ \\
+  量子数 & $n = 1,2,3,\ldots$ & $n = 0,1,2,\ldots$ \\
+  \bottomrule
+\end{tabular}
+\end{column}
+\end{columns}
+
+\vspace{0.3em}
+\teacher{波数$\tilde{\nu}$で表すと：$E_n = (n+\frac{1}{2})hc\tilde{\nu}$。\\
+赤外吸収の波数がそのまま$\tilde{\nu}$に対応します。}
+\end{frame}
+
+% ============================================================
+\begin{frame}[shrink=5]{赤外吸収と選択律}
+
+\teacher{調和振動子のエネルギー間隔は等間隔$\hbar\omega$なので，\\
+赤外光を吸収するときの条件はシンプルです。}
+
+\vspace{0.3em}
+\textbf{選択律（selection rule）：}
+\importantbox{
+  $\Delta n = \pm 1$ \quad （基本振動のみ許される）
+}
+
+\textbf{赤外吸収の条件：}振動に伴い\textbf{双極子モーメントが変化}すること
+
+\vspace{0.3em}
+\begin{tabular}{lcl}
+  \toprule
+  分子 & 赤外活性？ & 理由 \\
+  \midrule
+  HCl, CO, H$_2$O & ○ & 双極子モーメントが変化 \\
+  H$_2$, N$_2$, O$_2$ & × & 対称 → 双極子変化なし \\
+  CO$_2$（逆対称伸縮） & ○ & 非対称モードで双極子変化 \\
+  \bottomrule
+\end{tabular}
+
+\vspace{0.3em}
+\textbf{基準振動モード数：}非直線分子 $3N - 6$，直線分子 $3N - 5$
+
+{\small 例：CO$_2$（直線，$N=3$）→ $3\times3 - 5 = 4$モード}
+\end{frame}
+
+% ============================================================
+\begin{frame}{換算質量と振動波数の計算}
+
+\teacher{入試では，具体的な分子の赤外吸収波数を計算させる問題がよく出ます。}
+
+\vspace{0.3em}
+\textbf{換算質量：}
+\[
+  \mu = \frac{m_1 m_2}{m_1 + m_2}
+\]
+
+\textbf{振動波数：}
+\[
+  \tilde{\nu} = \frac{1}{2\pi c}\sqrt{\frac{k}{\mu}}
+\]
+
+\vspace{0.3em}
+\textbf{計算例：}$^{12}$C$^{16}$O（$k = \SI{1855}{N.m^{-1}}$）
+\begin{align}
+  \mu &= \frac{12 \times 16}{12 + 16} \times \frac{1}{\SI{6.02e23}{}} = \SI{1.14e-26}{kg} \\[4pt]
+  \tilde{\nu} &= \frac{1}{2\pi \times \SI{3.00e8}{}}\sqrt{\frac{1855}{\SI{1.14e-26}{}}}
+  \approx \SI{2150}{cm^{-1}}
+\end{align}
+\end{frame}
+
+% ============================================================
+\begin{frame}{実在分子の振動：Morseポテンシャル}
+
+\teacher{実際の分子は「完全なばね」ではありません。\\
+大きく伸ばすと結合が切れる（解離する）ので，ポテンシャルは非対称です。}
+
+\begin{columns}[c]
+\begin{column}{0.5\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{figures/morse_vs_harmonic.png}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Morseポテンシャル：}
+\[
+  V^\text{M} = D_e[1 - e^{-a(R-R_e)}]^2
+\]
+{\small $D_e$：解離エネルギー}
+
+\vspace{0.3em}
+\textbf{エネルギー準位：}
+\[
+  E_n^\text{M} = E_n^\text{H} - \left(n+\tfrac{1}{2}\right)^2 \frac{hc\tilde{\nu}^2}{4D_e}
+\]
+
+\textbf{調和振動子との違い：}
+\begin{itemize}
+  \item 間隔が$n$とともに\alert{狭くなる}
+  \item 有限個の束縛状態しかない
+  \item 倍音（$\Delta n = 2, 3, \ldots$）が許される
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{黒体放射の定量的取り扱い}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{Planck分布の極限}
+
+\teacher{最初に定性的に学んだ黒体放射を，定量的に掘り下げましょう。\\
+入試では極限の導出がよく問われます。}
+
+\begin{columns}[c]
+\begin{column}{0.5\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{figures/planck_with_limits.png}
+\end{column}
+\begin{column}{0.5\textwidth}
+\textbf{Planck分布：}
+\[
+  \rho(\lambda,T) = \frac{8\pi hc}{\lambda^5}\frac{1}{e^{hc/\lambda k_\text{B}T} - 1}
+\]
+
+\textbf{短波長極限}（$\lambda \to 0$）：\\
+$e^{hc/\lambda k_\text{B}T} \to \infty$ → $\rho \to 0$\\
+{\small → Wien分布に一致}
+
+\vspace{0.3em}
+\textbf{長波長極限}（$\lambda \to \infty$）：\\
+$e^x \approx 1 + x$を使うと
+\[
+  \rho \approx \frac{8\pi k_\text{B}T}{\lambda^4}
+\]
+{\small → Rayleigh-Jeans式に一致}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}[shrink=5]{Wien の法則とStefan-Boltzmann の法則}
+
+\textbf{① Wienの変位則：}$\rho$が最大となる波長$\lambda_\text{max}$
+\[
+  \frac{d\rho}{d\lambda}\bigg|_{\lambda=\lambda_\text{max}} = 0
+  \quad \Longrightarrow \quad
+  \lambda_\text{max}T = \text{const}
+\]
+
+\teacher{$T$が高いほど$\lambda_\text{max}$は短波長に移動する。\\
+太陽（$\sim\SI{5800}{K}$）の放射ピークが可視光域にあるのはこのため。}
+
+\vspace{0.3em}
+\textbf{② Stefan-Boltzmannの法則：}全放射エネルギー密度$U$
+\[
+  U = \int_0^\infty \rho(\lambda,T)\,d\lambda \propto T^4
+\]
+
+導出のポイント：$x = hc/(\lambda k_\text{B}T)$と置換し，
+$\displaystyle\int_0^\infty \frac{x^3}{e^x - 1}dx = \frac{\pi^4}{15}$を使う。
+
+\importantbox{
+  $U = \dfrac{8\pi^5 k_\text{B}^4}{15h^3c^3}\,T^4 \propto T^4$
+}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{まとめ}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -813,23 +1033,19 @@ $\lambda = hc/\Delta E \approx \SI{117}{nm}$\\
 
 \begin{enumerate}
   \item \textbf{量子論の誕生}\\
-    Planck: $E = nh\nu$ → Einstein: 光電効果 → de Broglie: $\lambda = h/p$
+    Planck → Einstein → de Broglie → Schrödinger
 
-  \item \textbf{Schrödinger 方程式}\\
-    波動関数の微分 → 演算子 → $\hat{H}\psi = E\psi$
-
-  \item \textbf{井戸型ポテンシャル}（$0 \leq x \leq a$）
-
-  \vspace{-0.3em}
-  \begin{center}
-  \begin{tabular}{ll}
-    波動関数 & $\psi_n = \sqrt{2/a}\sin(n\pi x/a)$ \\
-    エネルギー & $E_n = n^2 h^2/(8ma^2)$ \\
-  \end{tabular}
-  \end{center}
+  \item \textbf{井戸型ポテンシャル}\\
+    $\psi_n = \sqrt{2/a}\sin(n\pi x/a)$，\;$E_n = n^2 h^2/(8ma^2)$
 
   \item \textbf{物理的意味}\\
     $|\psi|^2$＝確率密度，零点エネルギー，対応原理
+
+  \item \textbf{調和振動子}\\
+    $E_n = (n+\frac{1}{2})\hbar\omega$，赤外吸収，Morseポテンシャル
+
+  \item \textbf{黒体放射の定量}\\
+    Planck分布の極限，Wien則，Stefan-Boltzmann則
 \end{enumerate}
 \end{frame}
 
@@ -837,22 +1053,29 @@ $\lambda = hc/\Delta E \approx \SI{117}{nm}$\\
 \begin{frame}[shrink=5]{入試対策チェックリスト}
 
 \begin{block}{これができれば合格ラインです：}
+  {\small
   \begin{tabular}{cl}
-    $\square$ & 変数分離法の手順を最初から再現できるか \\
-    $\square$ & 境界条件を適用して$k = n\pi/a$を導けるか \\
-    $\square$ & 規格化の積分を\textbf{半角公式}で計算できるか \\
-    $\square$ & 零点エネルギーを\textbf{不確定性原理}で説明できるか \\
-    $\square$ & 共役ポリエンの吸収波長を計算できるか \\
+    $\square$ & 変数分離 → 境界条件 → 規格化（半角公式）を再現できるか \\
+    $\square$ & 零点エネルギーを不確定性原理で説明できるか \\
+    $\square$ & 共役ポリエンの吸収波長$\lambda$を計算できるか \\
+    $\square$ & 調和振動子の$E_n$，換算質量，振動波数を求められるか \\
+    $\square$ & Morseポテンシャルと調和振動子の違いを図示できるか \\
+    $\square$ & Planck分布の長波長/短波長極限を導出できるか \\
+    $\square$ & Wien則・Stefan-Boltzmann則を$\rho$から導けるか \\
   \end{tabular}
+  }
 \end{block}
 
 \vspace{0.3em}
 \textbf{\color{alertred}過去の出題：}
+{\small
 \begin{itemize}
-  \item 2024年度 第2問：黒体放射のプランク分布
-  \item 2025年度 第2問：調和振動子のSchrödinger方程式
-  \item 2021年度 第2問：共役ポリエンのparticle-in-a-box
+  \item 2024：Planck分布，Rayleigh-Jeans極限，Wien則，Stefan-Boltzmann導出
+  \item 2025：調和振動子のSchrödinger方程式，Morse，赤外活性，CO$_2$レーザー
+  \item 2023：反応速度（1次反応），分子間力，NMR
+  \item 2021：分子軌道（NO），particle-in-a-box（共役ポリエン）
 \end{itemize}
+}
 \end{frame}
 
 % ============================================================
