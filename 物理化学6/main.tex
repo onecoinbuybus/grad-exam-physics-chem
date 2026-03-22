@@ -33,7 +33,7 @@
 \newcommand{\highlight}[1]{\colorbox{yellow!30}{$\displaystyle #1$}}
 \newcommand{\importantbox}[1]{%
   \begin{center}
-  \fcolorbox{darkblue}{blue!5}{\parbox{0.85\textwidth}{\centering #1}}
+  \fcolorbox{darkblue}{blue!5}{\parbox{0.75\textwidth}{\centering\small #1}}
   \end{center}
 }
 \newcommand{\exammark}[1]{{\small\color{examred}\textbf{【入試】}#1}}
@@ -58,13 +58,15 @@
 
 \vspace{1em}
 \importantbox{
-  \textbf{Schrödinger方程式} $\hat{H}\psi = E\psi$ を\\
-  具体的なポテンシャル $V(x)$ のもとで解く → エネルギーと波動関数が分かる
+  \textbf{Schrödinger方程式} $\hat{H}\psi = E\psi$ を\\[4pt]
+  具体的なポテンシャル $V(x)$ のもとで解く\\[2pt]
+  {\large$\downarrow$}\\[2pt]
+  エネルギーと波動関数が分かる
 }
 
-\vspace{1em}
+\vspace{0.5em}
 \textbf{今日の流れ：}
-\begin{enumerate}
+\begin{enumerate}\itemsep=0.4em
   \item なぜ古典力学ではダメなのか？（量子論の誕生）
   \item Schrödinger方程式はどこから来るのか？
   \item どうやって解くのか？（変数分離法）
