@@ -15,11 +15,13 @@
 \makeatother
 \setlength{\leftmargini}{1em}
 
-% ===== CJK support (Japanese + Simplified Chinese) =====
+% ===== Japanese support (slide content) =====
 \usepackage{luatexja}
 \usepackage[haranoaji]{luatexja-preset}
-% Extend CJK character range to cover Simplified Chinese
-\ltjsetparameter{jacharrange={-1, +2, +3, -4, -5, +6, +7, +8}}
+% === Chinese SC support for speaker notes ===
+% Fandol fonts are bundled in TeX Live / Overleaf
+\usepackage{luatexja-fontspec}
+\newjfontfamily\zhnotefont[BoldFont=FandolHei-Bold.otf]{FandolHei-Regular.otf}
 
 % ===== Packages =====
 \usepackage{amsmath, amssymb, mathtools}
@@ -40,7 +42,7 @@
   \pagecolor{yellow!5}%
   \vspace{0.5em}
   \begin{minipage}[t]{0.95\textwidth}
-    \scriptsize\insertnote
+    \scriptsize\zhnotefont\insertnote
   \end{minipage}
 }
 
