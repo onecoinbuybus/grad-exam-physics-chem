@@ -586,7 +586,11 @@ $Y_{0,0}$の規格化を確認してみましょう：
 とすると$E_J = BJ(J+1)$
 
 \vspace{0.3em}
-\textbf{選択律：}$\Delta J = \pm 1$（双極子モーメントを持つ分子のみ）
+\textbf{選択律：}$\Delta J = \pm 1$
+
+{\small 理由：光子は角運動量$1\hbar$を持つため，吸収・放出で$J$は1だけ変化する。\\
+さらに，電磁波は\textbf{双極子モーメント}と結合するため，\\
+$\mathrm{N}_2$, $\mathrm{O}_2$などの対称分子は永久双極子を持たず，純回転スペクトルを\alert{示さない}。}
 
 \vspace{0.3em}
 $J \to J+1$の遷移エネルギー：
@@ -916,52 +920,95 @@ $E_-$は逆にエネルギーが上がる → 反結合。}
 \end{frame}
 
 % ============================================================
-\begin{frame}{MO能級図と電子配置}
+\begin{frame}{MO能級図：$\mathrm{H}_2$の例}
 
-\textbf{分子軌道の種類：}
-\begin{itemize}
-  \item $\sigma$, $\sigma^*$：結合軸方向の重なり（$s$軌道や$p_z$軌道から）
-  \item $\pi$, $\pi^*$：結合軸に垂直な重なり（$p_x$, $p_y$軌道から）
-\end{itemize}
+\begin{columns}[c]
+\begin{column}{0.55\textwidth}
+  \begin{center}
+  \begin{tikzpicture}[scale=0.85,
+    level/.style={very thick, darkblue},
+    elec/.style={->, thick, line cap=round}]
+    % Atom A (left)
+    \draw[level] (-3.2,1) -- (-2.2,1);
+    \node[above] at (-2.7,1.05) {\small $1s_A$};
+    % Atom B (right)
+    \draw[level] (2.2,1) -- (3.2,1);
+    \node[above] at (2.7,1.05) {\small $1s_B$};
+    % sigma (bonding)
+    \draw[level] (-0.5,0) -- (0.5,0);
+    \node[right] at (0.55,0) {\small $\sigma$};
+    % sigma* (antibonding)
+    \draw[level] (-0.5,2.8) -- (0.5,2.8);
+    \node[right] at (0.55,2.8) {\small $\sigma^*$};
+    % Correlation lines
+    \draw[thin, gray, dashed] (-2.2,1) -- (-0.5,0);
+    \draw[thin, gray, dashed] (-2.2,1) -- (-0.5,2.8);
+    \draw[thin, gray, dashed] (2.2,1) -- (0.5,0);
+    \draw[thin, gray, dashed] (2.2,1) -- (0.5,2.8);
+    % Electrons in sigma
+    \draw[elec, alertred] (-0.12,0.15) -- (-0.12,0.65);
+    \draw[elec, alertred] (0.12,0.65) -- (0.12,0.15);
+    % Labels
+    \node[below] at (-2.7,-0.3) {原子A};
+    \node[below] at (0,-0.3) {$\mathrm{H}_2$};
+    \node[below] at (2.7,-0.3) {原子B};
+    % Energy arrow
+    \draw[->, thick] (-4,-.2) -- (-4,3) node[above] {\small $E$};
+  \end{tikzpicture}
+  \end{center}
+\end{column}
+\begin{column}{0.45\textwidth}
+  $\mathrm{H}_2$：2電子が$\sigma$に入る\\
+  → 結合次数 $= (2-0)/2 = 1$
+
+  \vspace{0.5em}
+  \textbf{Aufbau原理：}\\
+  低い軌道から順に電子を詰める
+
+  \vspace{0.3em}
+  \textbf{Pauli原理：}\\
+  各軌道に最大2個（$\uparrow\downarrow$）
+
+  \vspace{0.3em}
+  \textbf{Hund則：}\\
+  縮退軌道はまず1個ずつ
+\end{column}
+\end{columns}
 
 \vspace{0.3em}
-\textbf{Aufbau原理：}エネルギーの低い軌道から順に電子を詰める。\\
-各軌道に最大2個（Pauli原理），縮退軌道はまず1個ずつ（Hund則）。
-
-\vspace{0.3em}
-\textbf{結合次数：}
 \importantbox{
   結合次数 $= \dfrac{(\text{結合性電子数}) - (\text{反結合性電子数})}{2}$
 }
-
-\teacher{結合次数が大きいほど結合が強い。\\
-結合次数$= 0$なら安定な分子は形成されない。}
 \end{frame}
 
 % ============================================================
 \begin{frame}{MO法の応用例}
 
 \begin{center}
-\begin{tabular}{lcccc}
+{\small
+\begin{tabular}{lcccl}
   \toprule
   分子 & 電子配置 & 結合次数 & 安定？ & 備考 \\
   \midrule
-  $\mathrm{H}_2$ & $(\sigma)^2$ & 1 & ○ & 単結合 \\
-  $\mathrm{He}_2$ & $(\sigma)^2(\sigma^*)^2$ & 0 & × & 結合なし \\
-  $\mathrm{O}_2$ & $\cdots(\pi)^4(\pi^*)^2$ & 2 & ○ & 二重結合 \\
+  $\mathrm{H}_2$ & $(\sigma_{1s})^2$ & 1 & ○ & 単結合 \\[2pt]
+  $\mathrm{He}_2$ & $(\sigma_{1s})^2(\sigma_{1s}^*)^2$ & 0 & × & 結合なし \\[2pt]
+  $\mathrm{O}_2$ & $(\sigma_{2s})^2(\sigma_{2s}^*)^2(\sigma_{2p})^2(\pi_{2p})^4(\pi_{2p}^*)^2$ & 2 & ○ & 常磁性 \\
   \bottomrule
 \end{tabular}
+}
 \end{center}
 
 \vspace{0.3em}
-\teacher{$\mathrm{O}_2$の$\pi^*$軌道は2つ縮退しており，\\
-Hund則により電子が1個ずつ入る → \alert{不対電子が2個}。}
+\teacher{$\mathrm{O}_2$の$\pi_{2p}^*$軌道は2つ縮退しており，\\
+Hund則により電子が1個ずつ入る → \alert{不対電子が2個} → 常磁性。}
 
 \vspace{0.3em}
+{\small \textbf{注意：}$\mathrm{O}_2$, $\mathrm{F}_2$では$\sigma_{2p}$が$\pi_{2p}$より\textbf{低い}が，\\
+$\mathrm{N}_2$以下の軽い分子では$\pi_{2p}$が$\sigma_{2p}$より低い。\\
+この能級の逆転は入試頻出の論点。}
+
 \importantbox{
-  $\mathrm{O}_2$が\textbf{常磁性}（磁石に引かれる）であることは\\
-  VB法（全電子が対になる）では説明できない。\\
-  MO法の大きな成功の一つ。
+  $\mathrm{O}_2$の常磁性はVB法では説明できない → \textbf{MO法の勝利}
 }
 \end{frame}
 
@@ -987,9 +1034,13 @@ $\mathrm{H}_2$分子（電子1と電子2）を考えましょう。}
   → 核間領域の電子密度が増加 → エネルギー低下 → \textbf{共有結合}
 }
 
-\teacher{この\textbf{交換対称性}が結合エネルギーの起源です。\\
-反対称な組み合わせ$\psi_A(1)\psi_B(2) - \psi_A(2)\psi_B(1)$は\\
-核間の電子密度が減少し，反結合的になります。}
+\vspace{0.3em}
+{\small \textbf{Pauli原理との関係：}全波動関数（空間$\times$スピン）は反対称でなければならない。\\
+空間対称（結合性$\psi_+$）→ スピン反対称$(\alpha\beta - \beta\alpha)/\sqrt{2}$（\textbf{一重項}）\\
+空間反対称（反結合性$\psi_-$）→ スピン対称（\textbf{三重項}）}
+
+\teacher{つまり結合を作る電子対は必ず\textbf{反平行スピン}（$\uparrow\downarrow$）です。\\
+これがVB法における「電子対 = 結合」の物理的根拠です。}
 \end{frame}
 
 % ============================================================
