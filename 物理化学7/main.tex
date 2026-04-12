@@ -478,22 +478,29 @@ $\alpha \equiv \sqrt{2m(V_0 - E)}/\hbar$と置くと：
     \node[below] at (3,-0.1) {\small $L$};
   \end{scope}
   % === Lower panel: psi(x) ===
+  % Parameters: k=1.3 rad/unit, alpha=0.6, psi0=0.6 at x=0
+  % At x=0: psi=0.6, psi'=-0.36
+  % At x=L=3: psi=0.6*exp(-1.8)=0.099, psi'=-0.059
   % Axis
   \draw[->, thick] (-3.5,0) -- (6.5,0) node[right] {\small $x$};
   \node[left] at (-3.5,0.8) {\small $\psi(x)$};
-  % Region I (x<0): incident + reflected wave (large oscillation)
-  \draw[thick, darkblue, samples=80, domain=-3.5:0]
-    plot (\x, {0.7*sin(180*1.2*\x) + 0.2*sin(180*1.2*\x + 60)});
-  % Region II (0<x<L): exponential decay
-  \draw[thick, accent, samples=40, domain=0:3]
-    plot (\x, {0.65*exp(-0.55*\x)});
-  % Region III (x>L): transmitted wave (smaller amplitude)
-  \draw[thick, alertred, samples=80, domain=3:6]
-    plot (\x, {0.12*sin(180*1.2*(\x-3))});
+  % Region I (x<0): oscillation ending at psi(0)=0.6
+  % Use 0.6*cos(k*x) + (0.36/k)*sin(k*x) to match value=0.6, slope=-0.36 at x=0
+  % = 0.6*cos(74.5*x) + 0.277*sin(74.5*x)  [k=1.3, 180/pi*1.3=74.5 deg]
+  \draw[thick, darkblue, samples=120, domain=-3.5:0]
+    plot (\x, {0.6*cos(74.48*\x) + 0.277*sin(74.48*\x)});
+  % Region II (0<x<L): exponential decay from 0.6
+  \draw[thick, accent, samples=50, domain=0:3]
+    plot (\x, {0.6*exp(-0.6*\x)});
+  % Region III (x>L): transmitted wave, amplitude ~0.099, matching value and slope
+  % psi = 0.099*cos(k*(x-L)) + (0.059/k)*sin(k*(x-L))
+  % = 0.099*cos(74.48*(x-3)) + 0.0454*sin(74.48*(x-3))
+  \draw[thick, alertred, samples=120, domain=3:6]
+    plot (\x, {0.099*cos(74.48*(\x-3)) + 0.0454*sin(74.48*(\x-3))});
   % Labels
-  \node[above, darkblue] at (-1.8, 0.85) {\scriptsize 入射波＋反射波};
-  \node[above, accent] at (1.5, 0.7) {\scriptsize $e^{-\alpha x}$};
-  \node[above, alertred] at (4.5, 0.2) {\scriptsize 透過波};
+  \node[above, darkblue] at (-1.8, 0.75) {\scriptsize 入射波＋反射波};
+  \node[above, accent] at (1.5, 0.55) {\scriptsize $e^{-\alpha x}$};
+  \node[above, alertred] at (4.8, 0.18) {\scriptsize 透過波};
   % Vertical dashed lines connecting panels
   \draw[thin, gray, dotted] (0,-0.9) -- (0,5);
   \draw[thin, gray, dotted] (3,-0.9) -- (3,5);
