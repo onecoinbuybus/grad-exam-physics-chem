@@ -48,7 +48,7 @@
 
 % ===== Title =====
 \title{物理化学 7}
-\subtitle{量子化学の展開：調和振動子・回転・水素原子・変分法}
+\subtitle{量子化学の展開：調和振動子・散乱・回転・水素原子・変分法}
 \author{Weilin Yuan}
 \date{}
 \institute{}
@@ -65,9 +65,9 @@
   \item 波動関数の解釈（Born・規格化・期待値）
   \item 量子力学の公理的まとめ
   \item 調和振動子の詳細（Hermite多項式・規格化）
+  \item 階段ポテンシャル（反射・透過・トンネル効果）
   \item 球面調和関数と分子回転
   \item 水素原子のSchrödinger方程式
-  \item 階段ポテンシャル（反射・透過・トンネル効果）
   \item 変分法とLCAO近似
 \end{enumerate}
 \end{frame}
@@ -124,8 +124,8 @@ $|A|^2 = A^*A = 2$のように実数の正値が得られるためです。}
 状態量$x$を何度も観測したときの平均値を\textbf{期待値}という。
 
 \[
-  \langle\hat{x}\rangle \equiv \int_\Omega \Phi(x)^*\hat{x}\,\Phi(x)\,dx
-  = \int_\Omega \Phi(x)^*\,x\,\Phi(x)\,dx
+  \langle\hat{x}\rangle \equiv \int_\Omega \psi(x)^*\hat{x}\,\psi(x)\,dx
+  = \int_\Omega \psi(x)^*\,x\,\psi(x)\,dx
   = \int_\Omega x\rho(x)\,dx
 \]
 
@@ -137,6 +137,28 @@ $|A|^2 = A^*A = 2$のように実数の正値が得られるためです。}
 \vspace{0.3em}
 {\small 例：井戸型ポテンシャル$\psi = \sqrt{2/a}\sin(n\pi x/a)$で\\
 $\langle\hat{x}\rangle = \int_0^a x\cdot|\psi|^2\,dx = \int_0^a \frac{2}{a}x\sin^2\!\left(\frac{n\pi x}{a}\right)dx$}
+\end{frame}
+
+% ============================================================
+\begin{frame}{期待値の計算に必要な積分技巧}
+
+\teacher{前ページの$\langle\hat{x}\rangle$を実際に計算するには，\\
+$\int x\sin^2 x\,dx$型の積分を処理する必要があります。}
+
+\vspace{0.3em}
+\textbf{半角公式：}$\sin^2 x = \dfrac{1 - \cos 2x}{2}$ を使うと：
+
+\[
+  \int x\sin^2 x\,dx = \frac{1}{2}\int x(1-\cos 2x)\,dx
+\]
+
+\textbf{部分積分法：}$\int f(x)g'(x)\,dx = f(x)g(x) - \int f'(x)g(x)\,dx$
+
+\vspace{0.3em}
+$f(x) = x$，$g'(x) = 1-\cos 2x$，$g(x) = x - \frac{1}{2}\sin 2x$とすれば：
+
+\teacher{この2つの技巧（半角公式＋部分積分）は\\
+規格化や期待値の計算で繰り返し使います。覚えておきましょう。}
 \end{frame}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,10 +177,14 @@ $\langle\hat{x}\rangle = \int_0^a x\cdot|\psi|^2\,dx = \int_0^a \frac{2}{a}x\sin
   \item 古典力学における物理量に対応する\textbf{線形演算子}が存在する。
 
     \vspace{0.3em}
-    \begin{tabular}{cccc}
-      運動量 & 位置 & エネルギー & ハミルトニアン \\
-      $\hat{p} = -i\hbar\partial_x$ & $\hat{x} = x$ & $\hat{E} = i\hbar\partial_t$ & $\hat{H} = \hat{T} + \hat{V}$
+    \begin{tabular}{ccc}
+      運動量 & 位置 & ハミルトニアン \\
+      $\hat{p} = -i\hbar\partial_x$ & $\hat{x} = x$ & $\hat{H} = \hat{T} + \hat{V}$
     \end{tabular}
+
+    \vspace{0.2em}
+    {\small （$\hat{H}$がエネルギーに対応する可観測量の演算子。\\
+    時間依存Schrödinger方程式$\hat{H}\Psi = i\hbar\partial_t\Psi$がこれを時間発展と結ぶ。）}
 
   \vspace{0.5em}
   \item 物理量の測定値は，対応する演算子の\textbf{固有値}のいずれかである。
@@ -176,30 +202,10 @@ $\langle\hat{x}\rangle = \int_0^a x\cdot|\psi|^2\,dx = \int_0^a \frac{2}{a}x\sin
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ============================================================
-\begin{frame}{期待値の計算に必要な積分}
-
-\teacher{井戸型ポテンシャルの期待値$\langle\hat{x}\rangle$を求めるには\\
-$\int x\sin^2 x\,dx$という積分を計算する必要があります。}
-
-\vspace{0.3em}
-\textbf{部分積分法：}
-\[
-  \int f(x)g'(x)\,dx = f(x)g(x) - \int f'(x)g(x)\,dx
-\]
-
-\textbf{半角公式：}$\sin^2 x = \dfrac{1 - \cos 2x}{2}$ を使うと：
-
-\[
-  \int x\sin^2 x\,dx = \int x\cdot\frac{1-\cos 2x}{2}\,dx
-  = \frac{1}{2}\int x(1-\cos 2x)\,dx
-\]
-
-\teacher{部分積分で$f(x) = x$，$g'(x) = 1-\cos 2x$，\\
-$g(x) = x - \frac{1}{2}\sin 2x$とすれば計算できます。}
-\end{frame}
-
-% ============================================================
 \begin{frame}{調和振動子と分子振動}
+
+\teacher{前回は調和振動子のエネルギー準位$E_n = (n+\frac{1}{2})\hbar\omega$を学びました。\\
+今回はその\textbf{波動関数の具体的な形}を導出します。}
 
 \begin{columns}[c]
 \begin{column}{0.45\textwidth}
@@ -214,28 +220,25 @@ $g(x) = x - \frac{1}{2}\sin 2x$とすれば計算できます。}
   \end{tikzpicture}
 
   \vspace{0.3em}
-  バネ定数を$k$とする。\\
-  ハミルトニアン：
-  \[
-    H = \frac{1}{2m}p^2 + \frac{1}{2}kx^2
-  \]
-\end{column}
-\begin{column}{0.55\textwidth}
-  \textbf{二原子分子の伸縮運動（分子振動）}
-
-  \vspace{0.3em}
-  換算質量：$\mu = \dfrac{m_1 m_2}{m_1 + m_2}$
-
-  \vspace{0.3em}
   \textbf{Schrödinger方程式：}
   \[
     E\Psi(x) = \left[-\frac{\hbar^2}{2\mu}\frac{d^2}{dx^2} + \frac{1}{2}kx^2\right]\Psi(x)
   \]
 \end{column}
-\end{columns}
+\begin{column}{0.55\textwidth}
+  \textbf{二原子分子の伸縮運動}
 
-\vspace{0.3em}
-\teacher{演算子に置き換え：$\hat{H} = \frac{1}{2m}\hat{p}^2 + \frac{1}{2}k\hat{x}^2$}
+  \vspace{0.3em}
+  換算質量：$\mu = \dfrac{m_1 m_2}{m_1 + m_2}$
+
+  \vspace{0.3em}
+  演算子形式：$\hat{H} = \dfrac{1}{2\mu}\hat{p}^2 + \dfrac{1}{2}k\hat{x}^2$
+
+  \vspace{0.3em}
+  \teacher{井戸型と違い$V(x) = \frac{1}{2}kx^2$なので\\
+  解はもっと複雑になります。}
+\end{column}
+\end{columns}
 \end{frame}
 
 % ============================================================
@@ -333,9 +336,158 @@ $a = 1$として②を使うと：
 \importantbox{
   $N_1 = \left(\dfrac{1}{2\alpha\sqrt{\pi}}\right)^{1/2}$
 }
+\end{frame}
 
-\teacher{一般の$N_n$も同様にHermite多項式の直交性を使って求められます。\\
-公式$N_n = [1/(2^n n!\,\alpha\sqrt{\pi})]^{1/2}$と一致することを確認してみてください。}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{階段ポテンシャル}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{なぜ階段ポテンシャルを学ぶのか}
+
+\teacher{井戸型・調和振動子は\textbf{束縛状態}（粒子が閉じ込められる）でした。\\
+次は粒子がポテンシャルの壁に\textbf{ぶつかる}問題を考えましょう。}
+
+\vspace{0.3em}
+\textbf{古典力学の予測：}
+\begin{itemize}
+  \item $E > V_0$なら壁を越えて100\%通過する
+  \item $E < V_0$なら壁に跳ね返されて100\%反射する
+\end{itemize}
+
+\vspace{0.3em}
+\textbf{量子力学では：}
+\begin{itemize}
+  \item $E > V_0$でも一部が\alert{反射}する（量子反射）
+  \item $E < V_0$でも壁の中に波動関数が\alert{しみ出す}（トンネル効果の起源）
+\end{itemize}
+
+\teacher{これらは走査型トンネル顕微鏡（STM）や$\alpha$崩壊など，\\
+実際の化学・物理現象の基礎です。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{$E > V_0$の場合：量子反射}
+
+\begin{columns}[c]
+\begin{column}{0.4\textwidth}
+  \begin{tikzpicture}[scale=0.65]
+    % Potential step
+    \fill[blue!8] (0,0) rectangle (4,2);
+    \draw[very thick, darkblue] (-3,0) -- (0,0) -- (0,2) -- (4,2);
+    \draw[->, thick] (-3,0) -- (4.5,0) node[right] {$x$};
+    \draw[->, thick] (0,-0.3) -- (0,3) node[above] {$V$};
+    \node[left] at (0,2) {$V_0$};
+    \node[below] at (0,-0.1) {$0$};
+    % Energy line
+    \draw[dashed, alertred] (-3,2.5) -- (4,2.5) node[right] {$E$};
+    % Incident wave
+    \draw[->, accent, thick] (-2.5,1) -- (-1,1);
+    \node[above, accent] at (-1.75,1) {\small 入射波};
+  \end{tikzpicture}
+\end{column}
+\begin{column}{0.6\textwidth}
+  \textbf{領域1}（$x < 0$，$V = 0$）：
+  \[
+    \frac{d^2\psi}{dx^2} = -k_1^2\psi, \quad
+    k_1 = \frac{\sqrt{2mE}}{\hbar}
+  \]
+  $\psi_1(x) = \underbrace{Ae^{ik_1 x}}_{\text{入射波}} + \underbrace{Be^{-ik_1 x}}_{\text{反射波}}$
+
+  \vspace{0.3em}
+  \textbf{領域2}（$x \geq 0$，$V = V_0$）：
+  \[
+    \frac{d^2\psi}{dx^2} = -k_2^2\psi, \quad
+    k_2 = \frac{\sqrt{2m(E-V_0)}}{\hbar}
+  \]
+  $\psi_2(x) = \underbrace{Ce^{ik_2 x}}_{\text{透過波}}$
+  {\small （逆行波なし：$D = 0$）}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{接続条件と反射率・透過率}
+
+\textbf{接続条件}（$x = 0$で波動関数とその微分が連続）：
+
+\begin{enumerate}
+  \item $\psi_1(0) = \psi_2(0)$：\quad $A + B = C$
+  \item $\psi_1'(0) = \psi_2'(0)$：\quad $ik_1 A - ik_1 B = ik_2 C$
+\end{enumerate}
+
+\vspace{0.3em}
+これを解くと：
+\[
+  \frac{B}{A} = \frac{k_1 - k_2}{k_1 + k_2}, \qquad
+  \frac{C}{A} = \frac{2k_1}{k_1 + k_2}
+\]
+
+\importantbox{
+  \textbf{反射率：}\;$R = \dfrac{|B|^2}{|A|^2} = \left(\dfrac{k_1 - k_2}{k_1 + k_2}\right)^2$
+  \\[8pt]
+  \textbf{透過率：}\;$T = 1 - R = \dfrac{4k_1 k_2}{(k_1 + k_2)^2}$
+}
+
+\teacher{古典力学では$E > V_0$なら$T = 1$。量子力学では\alert{$T < 1$}！}
+\end{frame}
+
+% ============================================================
+\begin{frame}{$E < V_0$の場合：しみ出し}
+
+$E < V_0$のとき，領域2では$k_2$が虚数になる。\\
+$\alpha \equiv \sqrt{2m(V_0 - E)}/\hbar$と置くと：
+
+\[
+  \psi_1(x) = Ae^{ik_1 x} + Be^{-ik_1 x} \quad (x < 0)
+\]
+\[
+  \psi_2(x) = Ce^{-\alpha x} \quad (x \geq 0)
+\]
+{\small （$De^{+\alpha x}$は$x \to +\infty$で発散 → $D = 0$）}
+
+\vspace{0.3em}
+接続条件より：$\dfrac{B}{A} = \dfrac{k_1 - i\alpha}{k_1 + i\alpha}$
+
+\importantbox{
+  $R = \dfrac{|B|^2}{|A|^2} = \dfrac{k_1^2 + \alpha^2}{k_1^2 + \alpha^2} = 1$
+  \quad → \textbf{全反射}\\[6pt]
+  しかし$\psi_2 = Ce^{-\alpha x} \neq 0$：壁の中に波動関数が\alert{しみ出している}！
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{有限幅の障壁：トンネル効果}
+
+\teacher{半無限の壁では全反射でしたが，壁の幅が有限$L$なら？}
+
+\vspace{0.3em}
+\begin{center}
+\begin{tikzpicture}[scale=0.6]
+  \fill[blue!8] (0,0) rectangle (3,2.5);
+  \draw[very thick, darkblue] (-3,0) -- (0,0) -- (0,2.5) -- (3,2.5) -- (3,0) -- (5.5,0);
+  \draw[->, thick] (-3,0) -- (6,0) node[right] {$x$};
+  \draw[->, thick] (0,-0.3) -- (0,3.2) node[above] {$V$};
+  \node[left] at (0,2.5) {$V_0$};
+  \node[below] at (0,-0.1) {$0$};
+  \node[below] at (3,-0.1) {$L$};
+  \draw[dashed, alertred] (-3,1.2) -- (5.5,1.2) node[right] {$E$};
+  % Exponential decay inside barrier
+  \draw[thick, accent, dashed] (0,1.5) .. controls (1,1.0) and (2,0.6) .. (3,0.4);
+  \node[above, accent] at (1.5,1.3) {\small $e^{-\alpha x}$};
+\end{tikzpicture}
+\end{center}
+
+しみ出した波動関数が壁の反対側に到達 → \textbf{トンネル効果}
+
+\importantbox{
+  透過確率：\;$T \approx e^{-2\alpha L}$，\quad
+  $\alpha = \dfrac{\sqrt{2m(V_0 - E)}}{\hbar}$\\[6pt]
+  $V_0 - E$が小さいほど，$L$が短いほど，$m$が小さいほど透過しやすい
+}
+
+\teacher{STM（走査型トンネル顕微鏡）は$T \propto e^{-2\alpha L}$の\\
+$L$依存性で原子レベルの凹凸を画像化しています。}
 \end{frame}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -343,9 +495,11 @@ $a = 1$として②を使うと：
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ============================================================
-\begin{frame}{二原子分子の回転}
+\begin{frame}{なぜ分子の回転を学ぶのか}
 
-\teacher{振動の次は\textbf{回転}です。二原子分子を剛体回転子と見なします。}
+\teacher{分子は振動だけでなく\textbf{回転}もしています。\\
+回転のエネルギー準位はマイクロ波分光で直接測定でき，\\
+そこから\textbf{結合距離}を精密に決定できます。}
 
 \vspace{0.3em}
 \begin{columns}[c]
@@ -356,25 +510,25 @@ $a = 1$として②を使うと：
   速度：$v = r\dfrac{d\theta}{dt}$，\quad $\theta$：回転角
 
   \vspace{0.3em}
-  \textbf{慣性モーメント：}
-  \[
-    I = \mu r^2
-  \]
+  \textbf{慣性モーメント：}$I = \mu r^2$
 \end{column}
 \begin{column}{0.5\textwidth}
   \textbf{角運動量：}$\mathbf{L} = \mathbf{r}\times\mathbf{p}$
   \begin{align}
-    L &= r\cdot p = r\cdot \mu v \notag\\
-      &= r\cdot\mu r\frac{d\theta}{dt}
+    L &= r\cdot \mu v
        = \mu r^2\frac{d\theta}{dt}
        = I\frac{d\theta}{dt} \notag
   \end{align}
+
+  \vspace{0.3em}
+  \textbf{回転の運動エネルギー：}
+  \[
+    T = \frac{L^2}{2I}
+  \]
 \end{column}
 \end{columns}
 
-\vspace{0.3em}
-\teacher{回転の運動エネルギーは$T = L^2/(2I)$。\\
-ポテンシャルなし（$V = 0$）なので$\hat{H} = \hat{\mathbf{L}}^2/(2I)$。}
+\teacher{ポテンシャルなし（$V = 0$）なので$\hat{H} = \hat{\mathbf{L}}^2/(2I)$。}
 \end{frame}
 
 % ============================================================
@@ -424,6 +578,30 @@ $Y_{0,0}$の規格化を確認してみましょう：
 3次元の場合は$r^2\sin\theta\,dr\,d\theta\,d\phi$です。}
 \end{frame}
 
+% ============================================================
+\begin{frame}{回転スペクトルと選択律}
+
+\textbf{回転定数：}$B \equiv \dfrac{\hbar^2}{2I} = \dfrac{h}{8\pi^2 I}$
+とすると$E_J = BJ(J+1)$
+
+\vspace{0.3em}
+\textbf{選択律：}$\Delta J = \pm 1$（双極子モーメントを持つ分子のみ）
+
+\vspace{0.3em}
+$J \to J+1$の遷移エネルギー：
+\[
+  \Delta E = E_{J+1} - E_J = B[(J+1)(J+2) - J(J+1)] = 2B(J+1)
+\]
+
+\importantbox{
+  回転スペクトルの吸収線は$2B, 4B, 6B, \ldots$と\alert{等間隔}に並ぶ！\\[4pt]
+  間隔$2B$を測定 → $I$が分かる → $r = \sqrt{I/\mu}$で\textbf{結合距離}が決まる
+}
+
+\teacher{例：HClの回転スペクトルの間隔は約$\SI{21}{cm^{-1}}$ →
+$r \approx \SI{0.127}{nm}$}
+\end{frame}
+
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{水素原子}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -434,7 +612,7 @@ $Y_{0,0}$の規格化を確認してみましょう：
 \teacher{陽子と電子の2体問題を換算質量で1体問題に帰着させます。}
 
 \vspace{0.3em}
-$\mu = \dfrac{m_e m_p}{m_e + m_p}$（陽子と電子の換算質量）
+$\mu = \dfrac{m_e m_p}{m_e + m_p} \approx m_e$（陽子と電子の換算質量）
 
 \vspace{0.3em}
 \textbf{ハミルトニアン：}運動エネルギー＋クーロンポテンシャル
@@ -481,22 +659,23 @@ $\hat{\mathbf{L}}^2$の定義を使うと：
 % ============================================================
 \begin{frame}{水素原子の波動関数}
 
-変数分離$\Psi = R(r)\cdot Y(\theta,\phi)$で\textbf{動径波動関数}と\textbf{球面調和関数}に分離：
+変数分離$\Psi = R(r)\cdot Y(\theta,\phi)$で\textbf{動径波動関数}と\textbf{球面調和関数}に分離。
 
 \vspace{0.3em}
+\textbf{Bohr半径：}$a_0 = \dfrac{4\pi\varepsilon_0\hbar^2}{m_e e^2} \approx \SI{0.529}{\angstrom}$
+
+\vspace{0.5em}
 \begin{align}
-  \Psi_{100} &= R_{10}(r)Y_{00}(\theta,\phi)
+  \Psi_{100} &= R_{10}(r)Y_{00}
   = \frac{1}{\sqrt{\pi}}\left[\frac{1}{a_0}\right]^{3/2}
   \exp\!\left[-\frac{r}{a_0}\right] \notag\\[6pt]
-  \Psi_{200} &= R_{20}(r)Y_{00}(\theta,\phi)
+  \Psi_{200} &= R_{20}(r)Y_{00}
   = \frac{1}{4\sqrt{2\pi}}\left[\frac{1}{a_0}\right]^{3/2}
   \left[2 - \frac{r}{a_0}\right]\exp\!\left[-\frac{r}{2a_0}\right] \notag\\[6pt]
-  \Psi_{210} &= R_{21}(r)Y_{10}(\theta,\phi)
-  = \frac{1}{4\sqrt{2\pi}}\frac{1}{a_0}\left[\frac{1}{a_0}\right]^{3/2}
-  \left[\frac{r}{a_0}\right]\exp\!\left[-\frac{r}{2a_0}\right]\cos\theta \notag
+  \Psi_{210} &= R_{21}(r)Y_{10}
+  = \frac{1}{4\sqrt{2\pi}}\left[\frac{1}{a_0}\right]^{5/2}
+  r\exp\!\left[-\frac{r}{2a_0}\right]\cos\theta \notag
 \end{align}
-
-\teacher{$a_0$はBohr半径。添字$(n,l,m)$は3つの量子数に対応。}
 \end{frame}
 
 % ============================================================
@@ -547,7 +726,7 @@ $\hat{\mathbf{L}}^2$の定義を使うと：
 \importantbox{
   $\dfrac{1}{\lambda} = R_\infty\left[\dfrac{1}{m^2} - \dfrac{1}{n^2}\right]$
   \quad $(n > m > 0)$\\[4pt]
-  $R_\infty$：\textbf{リュードベリ定数}
+  $R_\infty$：\textbf{リュードベリ定数}（$\SI{1.097e7}{m^{-1}}$）
 }
 \end{frame}
 
@@ -578,108 +757,15 @@ $R_\infty = \SI{1.097e7}{m^{-1}}$を代入すれば計算できます。}
 \end{frame}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{階段ポテンシャル}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% ============================================================
-\begin{frame}{階段ポテンシャル（$E > V_0$の場合）}
-
-\begin{columns}[c]
-\begin{column}{0.4\textwidth}
-  \begin{tikzpicture}[scale=0.65]
-    % Potential step
-    \fill[blue!8] (0,0) rectangle (4,2);
-    \draw[very thick, darkblue] (-3,0) -- (0,0) -- (0,2) -- (4,2);
-    \draw[->, thick] (-3,0) -- (4.5,0) node[right] {$x$};
-    \draw[->, thick] (0,-0.3) -- (0,3) node[above] {$V$};
-    \node[left] at (0,2) {$V_0$};
-    \node[below] at (0,-0.1) {$0$};
-    % Energy line
-    \draw[dashed, alertred] (-3,2.5) -- (4,2.5) node[right] {$E$};
-    % Incident wave
-    \draw[->, accent, thick] (-2.5,1) -- (-1,1);
-    \node[above, accent] at (-1.75,1) {\small 入射波};
-  \end{tikzpicture}
-\end{column}
-\begin{column}{0.6\textwidth}
-  \textbf{領域1}（$x < 0$，$V = 0$）：
-  \[
-    \frac{d^2\psi}{dx^2} = -k_1^2\psi, \quad
-    k_1 = \frac{\sqrt{2mE}}{\hbar}
-  \]
-  $\psi_1(x) = Ae^{ik_1 x} + Be^{-ik_1 x}$
-
-  \vspace{0.3em}
-  \textbf{領域2}（$x \geq 0$，$V = V_0$）：
-  \[
-    \frac{d^2\psi}{dx^2} = -k_2^2\psi, \quad
-    k_2 = \frac{\sqrt{2m(E-V_0)}}{\hbar}
-  \]
-  $\psi_2(x) = Ce^{ik_2 x}$（透過波のみ，$D = 0$）
-\end{column}
-\end{columns}
-\end{frame}
-
-% ============================================================
-\begin{frame}{接続条件と反射率}
-
-\textbf{接続条件}（$x = 0$で波動関数が滑らかに接続）：
-
-\begin{enumerate}
-  \item $\psi_1(0) = \psi_2(0)$：\quad $A + B = C$
-  \item $\psi_1'(0) = \psi_2'(0)$：\quad $ik_1 A - ik_1 B = ik_2 C$
-\end{enumerate}
-
-\vspace{0.3em}
-これを解くと：
-\[
-  \frac{B}{A} = \frac{k_1 - k_2}{k_1 + k_2}, \qquad
-  \frac{C}{A} = \frac{2k_1}{k_1 + k_2}
-\]
-
-\importantbox{
-  \textbf{反射率：}\;$R = \dfrac{|B|^2}{|A|^2} = \left(\dfrac{k_1 - k_2}{k_1 + k_2}\right)^2$
-  \\[8pt]
-  \textbf{透過率：}\;$T = 1 - R = \dfrac{4k_1 k_2}{(k_1 + k_2)^2}$
-}
-
-\teacher{古典力学では$E > V_0$なら100\%透過。\\
-量子力学では\alert{量子反射}が起こる！}
-\end{frame}
-
-% ============================================================
-\begin{frame}{$E < V_0$の場合：トンネル効果}
-
-$E < V_0$のとき，$k_2$は虚数：$k_2 = i\alpha$，$\alpha = \sqrt{2m(V_0 - E)}/\hbar$
-
-\[
-  \psi_1(x) = Ae^{ik_1 x} + Be^{-ik_1 x} \quad (x < 0)
-\]
-\[
-  \psi_2(x) = Ce^{-\alpha x} \quad (x \geq 0)
-\]
-{\small （$De^{+\alpha x}$は$x \to +\infty$で発散するので$D = 0$）}
-
-\vspace{0.3em}
-接続条件：$\dfrac{B}{A} = \dfrac{k_1 - i\alpha}{k_1 + i\alpha}$，\quad
-$\dfrac{C}{A} = \dfrac{2k_1}{k_1 + i\alpha}$
-
-\importantbox{
-  $R = \dfrac{|B|^2}{|A|^2} = \dfrac{k_1^2 + \alpha^2}{k_1^2 + \alpha^2} = 1$\\[6pt]
-  → 全反射！しかし$\psi_2 = Ce^{-\alpha x} \neq 0$（\alert{しみ出し}がある）
-}
-
-\teacher{有限幅の障壁なら，しみ出しが反対側に到達 → \textbf{トンネル効果}}
-\end{frame}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{変分法}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ============================================================
-\begin{frame}{変分法の考え方}
+\begin{frame}{なぜ変分法が必要なのか}
 
-\teacher{厳密解が求まらない系では，\textbf{変分法}で近似解を求めます。}
+\teacher{水素原子（2体問題）は厳密に解けましたが，\\
+ヘリウム（3体問題），$\mathrm{H}_2^+$（3体）以上は厳密解が存在しません。\\
+そこで近似法が必要になります。}
 
 \vspace{0.3em}
 $\hat{H}\psi = E\psi$の両辺に左から$\psi^*$をかけて積分すると：
@@ -690,11 +776,13 @@ $\hat{H}\psi = E\psi$の両辺に左から$\psi^*$をかけて積分すると：
 }
 
 \vspace{0.3em}
-\textbf{変分原理：}試行関数$\psi$で計算したエネルギーは\\
-常に真の基底状態エネルギー以上になる。
+\textbf{変分原理：}任意の試行関数$\psi_\text{trial}$で計算したエネルギーは\\
+常に真の基底状態エネルギー$E_0$\textbf{以上}になる：
+\[
+  E[\psi_\text{trial}] \geq E_0
+\]
 
-\teacher{試行関数のパラメータを変えてエネルギーを最小化すれば，\\
-最良の近似解が得られます。}
+\teacher{パラメータを変えてエネルギーを最小化すれば最良の近似解が得られます。}
 \end{frame}
 
 % ============================================================
@@ -707,31 +795,36 @@ $\hat{H}\psi = E\psi$の両辺に左から$\psi^*$をかけて積分すると：
 \]
 
 \vspace{0.3em}
-\textbf{直交規格化条件：}
+\textbf{各原子軌道は規格化されている：}
 \[
-  \int\psi_A^*\psi_A = 1, \quad
-  \int\psi_B^*\psi_B = 1, \quad
-  \int\psi_A^*\psi_B = \int\psi_A\psi_B = 0
+  \int\psi_A^*\psi_A\,d\tau = 1, \qquad
+  \int\psi_B^*\psi_B\,d\tau = 1
 \]
 
-{\small （実関数の場合：$\int\psi_A\psi_B = 0$）}
+\textbf{一般に重なり積分$S \neq 0$：}
+\[
+  S \equiv \int\psi_A\psi_B\,d\tau \neq 0
+\]
 
-\vspace{0.3em}
+{\small （異なる原子上の軌道は完全には直交しない。\\
+$S = 0$と近似する場合もあるが，以下では一般的な$S \neq 0$で議論する。）}
+
 \teacher{$\psi_A$と$\psi_B$は異なる原子上の原子軌道です。\\
 これが分子軌道法の出発点になります。}
 \end{frame}
 
 % ============================================================
-\begin{frame}[shrink=5]{エネルギーの変分式}
+\begin{frame}{エネルギーの変分式}
 
-$\psi = C_A\psi_A + C_B\psi_B$を$E = \int\psi^*\hat{H}\psi\,d\tau / \int\psi^*\psi\,d\tau$に代入すると：
+$\psi = C_A\psi_A + C_B\psi_B$をRayleigh商に代入する。
 
+\vspace{0.3em}
 \textbf{記号の定義：}
 \begin{itemize}
   \item $\alpha_A = \int\psi_A\hat{H}\psi_A\,d\tau$，\;
         $\alpha_B = \int\psi_B\hat{H}\psi_B\,d\tau$
         \quad（\textbf{クーロン積分}）
-  \item $\beta = \int\psi_B\hat{H}\psi_A\,d\tau = \int\psi_A\hat{H}\psi_B\,d\tau$
+  \item $\beta = \int\psi_A\hat{H}\psi_B\,d\tau = \int\psi_B\hat{H}\psi_A\,d\tau$
         \quad（\textbf{共鳴積分}）
   \item $S = \int\psi_A\psi_B\,d\tau$
         \quad（\textbf{重なり積分}）
@@ -743,7 +836,37 @@ $\psi = C_A\psi_A + C_B\psi_B$を$E = \int\psi^*\hat{H}\psi\,d\tau / \int\psi^*\
 }
 
 \teacher{$\partial E/\partial C_A = 0$，$\partial E/\partial C_B = 0$として\\
-$C_A$，$C_B$を最適化 → 永年方程式 → 結合性・反結合性軌道}
+エネルギーを最小化 → \textbf{永年方程式}が得られます。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{永年方程式と分子軌道}
+
+エネルギー最小化条件から\textbf{永年行列式}：
+
+\importantbox{
+  $\begin{vmatrix}
+    \alpha - E & \beta - ES \\
+    \beta - ES & \alpha - E
+  \end{vmatrix} = 0$
+  \quad（$\alpha_A = \alpha_B = \alpha$の場合）
+}
+
+展開すると：$(\alpha - E)^2 - (\beta - ES)^2 = 0$
+
+\vspace{0.3em}
+\textbf{解：}
+\[
+  E_+ = \frac{\alpha + \beta}{1 + S} \quad \text{（\textbf{結合性}軌道）}, \qquad
+  E_- = \frac{\alpha - \beta}{1 - S} \quad \text{（\textbf{反結合性}軌道）}
+\]
+
+{\small $\beta < 0$なので$E_+ < \alpha < E_-$}
+
+\vspace{0.3em}
+\teacher{$E_+$は2つの原子が近づくことでエネルギーが下がる → 化学結合の形成！\\
+$E_-$は逆にエネルギーが上がる → 反結合。\\
+これが分子軌道法（MO法）の基本です。}
 \end{frame}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -760,17 +883,17 @@ $C_A$，$C_B$を最適化 → 永年方程式 → 結合性・反結合性軌道
   \item \textbf{調和振動子の詳細}\\
     $\Phi_n = N_n e^{-y^2/2}H_n(y)$，ガウス積分で規格化
 
+  \item \textbf{階段ポテンシャル}\\
+    量子反射（$R,T$の導出），トンネル効果$T \approx e^{-2\alpha L}$
+
   \item \textbf{球面調和関数と分子回転}\\
-    $E_J = J(J+1)\hbar^2/(2I)$，球面調和関数$Y_{J,m_J}(\theta,\phi)$
+    $E_J = BJ(J+1)$，選択律$\Delta J = \pm 1$，等間隔$2B(J+1)$
 
   \item \textbf{水素原子}\\
-    $E_n \propto -1/n^2$，量子数$(n,l,m)$，スペクトル系列
-
-  \item \textbf{階段ポテンシャル}\\
-    量子反射，トンネル効果（しみ出し）
+    $E_n \propto -1/n^2$，量子数$(n,l,m)$，Bohr半径$a_0$，スペクトル系列
 
   \item \textbf{変分法}\\
-    LCAO近似，クーロン積分$\alpha$，共鳴積分$\beta$，重なり積分$S$
+    LCAO → 永年方程式 → $E_\pm = (\alpha \pm \beta)/(1 \pm S)$
 \end{enumerate}
 \end{frame}
 
@@ -782,12 +905,13 @@ $C_A$，$C_B$を最適化 → 永年方程式 → 結合性・反結合性軌道
   \begin{tabular}{cl}
     $\square$ & 期待値$\langle\hat{x}\rangle$の計算（部分積分・半角公式） \\
     $\square$ & 調和振動子のHermite多項式と規格化（ガウス積分） \\
+    $\square$ & 階段ポテンシャルの反射率・透過率の導出 \\
+    $\square$ & トンネル効果$T \approx e^{-2\alpha L}$の意味と応用（STM） \\
     $\square$ & 球面調和関数$Y_{J,m_J}$の規格化確認 \\
+    $\square$ & 回転スペクトルの等間隔$2B$から結合距離の計算 \\
     $\square$ & 水素原子の量子数$(n,l,m)$の関係と軌道名 \\
     $\square$ & リュードベリ定数を使ったスペクトル波長の計算 \\
-    $\square$ & 階段ポテンシャルの反射率・透過率の導出 \\
-    $\square$ & $E < V_0$でのしみ出しとトンネル効果の説明 \\
-    $\square$ & 変分法のエネルギー式（クーロン・共鳴・重なり積分） \\
+    $\square$ & 永年方程式の行列式と$E_\pm$の導出 \\
   \end{tabular}
   }
 \end{block}
