@@ -460,26 +460,49 @@ $\alpha \equiv \sqrt{2m(V_0 - E)}/\hbar$と置くと：
 % ============================================================
 \begin{frame}{有限幅の障壁：トンネル効果}
 
-\teacher{半無限の壁では全反射でしたが，壁の幅が有限$L$なら？}
+\teacher{半無限の壁では全反射でしたが，壁の幅が有限$L$なら？\\
+しみ出した波動関数が壁の反対側に到達 → \textbf{トンネル効果}}
 
-\vspace{0.3em}
 \begin{center}
-\begin{tikzpicture}[scale=0.6]
-  \fill[blue!8] (0,0) rectangle (3,2.5);
-  \draw[very thick, darkblue] (-3,0) -- (0,0) -- (0,2.5) -- (3,2.5) -- (3,0) -- (5.5,0);
-  \draw[->, thick] (-3,0) -- (6,0) node[right] {$x$};
-  \draw[->, thick] (0,-0.3) -- (0,3.2) node[above] {$V$};
-  \node[left] at (0,2.5) {$V_0$};
-  \node[below] at (0,-0.1) {$0$};
-  \node[below] at (3,-0.1) {$L$};
-  \draw[dashed, alertred] (-3,1.2) -- (5.5,1.2) node[right] {$E$};
-  % Exponential decay inside barrier
-  \draw[thick, accent, dashed] (0,1.5) .. controls (1,1.0) and (2,0.6) .. (3,0.4);
-  \node[above, accent] at (1.5,1.3) {\small $e^{-\alpha x}$};
+\begin{tikzpicture}[scale=0.72]
+  % === Upper panel: V(x) and E ===
+  \begin{scope}[yshift=2.8cm]
+    \fill[blue!8] (0,0) rectangle (3,2.2);
+    \draw[very thick, darkblue] (-3.5,0) -- (0,0) -- (0,2.2) -- (3,2.2) -- (3,0) -- (6,0);
+    \draw[->, thick] (-3.5,0) -- (6.5,0) node[right] {\small $x$};
+    \draw[->, thick] (-3.5,0) -- (-3.5,2.8) node[above] {\small $V$};
+    \node[left] at (-3.5,2.2) {\small $V_0$};
+    \draw[dashed, alertred] (-3.5,0.9) -- (6,0.9);
+    \node[right, alertred] at (6,0.9) {\small $E$};
+    \node[below] at (0,-0.1) {\small $0$};
+    \node[below] at (3,-0.1) {\small $L$};
+  \end{scope}
+  % === Lower panel: psi(x) ===
+  % Axis
+  \draw[->, thick] (-3.5,0) -- (6.5,0) node[right] {\small $x$};
+  \node[left] at (-3.5,0.8) {\small $\psi(x)$};
+  % Region I (x<0): incident + reflected wave (large oscillation)
+  \draw[thick, darkblue, samples=80, domain=-3.5:0]
+    plot (\x, {0.7*sin(180*1.2*\x) + 0.2*sin(180*1.2*\x + 60)});
+  % Region II (0<x<L): exponential decay
+  \draw[thick, accent, samples=40, domain=0:3]
+    plot (\x, {0.65*exp(-0.55*\x)});
+  % Region III (x>L): transmitted wave (smaller amplitude)
+  \draw[thick, alertred, samples=80, domain=3:6]
+    plot (\x, {0.12*sin(180*1.2*(\x-3))});
+  % Labels
+  \node[above, darkblue] at (-1.8, 0.85) {\scriptsize 入射波＋反射波};
+  \node[above, accent] at (1.5, 0.7) {\scriptsize $e^{-\alpha x}$};
+  \node[above, alertred] at (4.5, 0.2) {\scriptsize 透過波};
+  % Vertical dashed lines connecting panels
+  \draw[thin, gray, dotted] (0,-0.9) -- (0,5);
+  \draw[thin, gray, dotted] (3,-0.9) -- (3,5);
 \end{tikzpicture}
 \end{center}
+\end{frame}
 
-しみ出した波動関数が壁の反対側に到達 → \textbf{トンネル効果}
+% ============================================================
+\begin{frame}{トンネル効果の透過確率}
 
 \importantbox{
   透過確率：\;$T \approx e^{-2\alpha L}$，\quad
@@ -487,8 +510,20 @@ $\alpha \equiv \sqrt{2m(V_0 - E)}/\hbar$と置くと：
   $V_0 - E$が小さいほど，$L$が短いほど，$m$が小さいほど透過しやすい
 }
 
+\vspace{0.3em}
+\textbf{3つの領域の波動関数：}
+\begin{align}
+  x < 0 &: \quad \psi_1 = Ae^{ik_1 x} + Be^{-ik_1 x}
+    \quad \text{（入射波＋反射波）} \notag\\
+  0 < x < L &: \quad \psi_2 = Ce^{-\alpha x} + De^{\alpha x}
+    \quad \text{（指数的減衰）} \notag\\
+  x > L &: \quad \psi_3 = Fe^{ik_1 x}
+    \quad \text{（透過波）} \notag
+\end{align}
+
 \teacher{STM（走査型トンネル顕微鏡）は$T \propto e^{-2\alpha L}$の\\
-$L$依存性で原子レベルの凹凸を画像化しています。}
+$L$依存性で原子レベルの凹凸を画像化しています。\\
+$\alpha$崩壊やトンネルダイオードもこの原理です。}
 \end{frame}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
