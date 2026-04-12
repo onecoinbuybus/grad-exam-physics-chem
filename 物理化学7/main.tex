@@ -60,15 +60,6 @@
 % ============================================================
 \begin{frame}{この講義の目標}
 
-前回は量子力学の基礎（Schrödinger方程式・井戸型ポテンシャル）を学びました。\\
-今回は\alert{より現実的な系}に進みます。
-
-\vspace{0.3em}
-\importantbox{
-  波動関数の物理的意味を深め，調和振動子・分子回転・水素原子を解き，\\
-  さらに変分法で近似解を求める方法を学ぶ
-}
-
 \textbf{今日の流れ：}
 \begin{enumerate}
   \item 波動関数の解釈（Born・規格化・期待値）
@@ -315,18 +306,19 @@ $\Phi_1(y) = N_1 \cdot 2y \cdot \exp(-y^2/2)$ の規格化：
 \[
   2 \cdot 4N_1^2\alpha\int_0^{\infty}y^2\exp(-y^2)\,dy = 1
 \]
-
-\textbf{ガウス積分：}
-\begin{enumerate}
-  \item $\displaystyle\int_{-\infty}^{\infty}e^{-ax^2}dx = \sqrt{\frac{\pi}{a}}$
-  \qquad
-  \item[②] $\displaystyle\int_{-\infty}^{\infty}x^2 e^{-ax^2}dx = \frac{1}{2a}\sqrt{\frac{\pi}{a}}$
-\end{enumerate}
 \end{frame}
 
 % ============================================================
 \begin{frame}{規格化係数$N_1$の決定}
 
+\textbf{ガウス積分の公式：}
+\begin{enumerate}
+  \item $\displaystyle\int_{-\infty}^{\infty}e^{-ax^2}dx = \sqrt{\frac{\pi}{a}}$
+  \qquad
+  \item[②] $\displaystyle\int_{-\infty}^{\infty}x^2 e^{-ax^2}dx = \frac{1}{2a}\sqrt{\frac{\pi}{a}}$
+\end{enumerate}
+
+\vspace{0.3em}
 $a = 1$として②を使うと：
 \[
   \int_{-\infty}^{\infty}y^2\exp(-y^2)\,dy = \frac{1}{2}\sqrt{\pi}
