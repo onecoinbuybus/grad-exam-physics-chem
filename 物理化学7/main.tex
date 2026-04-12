@@ -1,0 +1,809 @@
+% Overleaf: Menu → Compiler → LuaLaTeX に設定してください
+\documentclass[aspectratio=169, 11pt]{beamer}
+
+% ===== Metropolis Theme =====
+\usetheme[progressbar=frametitle, numbering=fraction, block=fill]{metropolis}
+
+% ===== Compress Metropolis spacing =====
+\makeatletter
+\setlength{\metropolis@frametitle@padding}{1.5ex}
+\makeatother
+\setlength{\leftmargini}{1em}
+
+% ===== Japanese support =====
+\usepackage{luatexja}
+\usepackage[haranoaji]{luatexja-preset}
+
+% ===== Packages =====
+\usepackage{amsmath, amssymb, mathtools}
+\usepackage{physics}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, patterns}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{appendixnumberbeamer}
+% Compress Beamer list spacing (enumitem conflicts with Beamer)
+\setbeamertemplate{itemize/enumerate body begin}{\vspace{-0.3em}}
+\setbeamertemplate{itemize/enumerate body end}{\vspace{-0.2em}}
+
+% ===== Custom colors =====
+\definecolor{accent}{RGB}{230,126,34}
+\definecolor{darkblue}{RGB}{23,67,88}
+\definecolor{alertred}{RGB}{192,57,43}
+
+\setbeamercolor{frametitle}{bg=darkblue}
+\setbeamercolor{progress bar}{fg=accent}
+\setbeamercolor{alerted text}{fg=alertred}
+
+% ===== Custom commands =====
+\newcommand{\highlight}[1]{\colorbox{yellow!30}{$\displaystyle #1$}}
+\newcommand{\importantbox}[1]{%
+  \begin{center}
+  \fcolorbox{darkblue}{blue!5}{\parbox{0.75\textwidth}{\centering\small #1}}
+  \end{center}
+}
+\newcommand{\teacher}[1]{{\color{darkblue}\textbf{→ #1}}}
+
+% ===== Title =====
+\title{物理化学 7}
+\subtitle{量子化学の展開：調和振動子・回転・水素原子・変分法}
+\author{Weilin Yuan}
+\date{}
+\institute{}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+\begin{frame}{この講義の目標}
+
+前回は量子力学の基礎（Schrödinger方程式・井戸型ポテンシャル）を学びました。\\
+今回は\alert{より現実的な系}に進みます。
+
+\vspace{0.3em}
+\importantbox{
+  波動関数の物理的意味を深め，調和振動子・分子回転・水素原子を解き，\\
+  さらに変分法で近似解を求める方法を学ぶ
+}
+
+\textbf{今日の流れ：}
+\begin{enumerate}
+  \item 波動関数の解釈（Born・規格化・期待値）
+  \item 量子力学の公理的まとめ
+  \item 調和振動子の詳細（Hermite多項式・規格化）
+  \item 球面調和関数と分子回転
+  \item 水素原子のSchrödinger方程式
+  \item 階段ポテンシャル（反射・透過・トンネル効果）
+  \item 変分法とLCAO近似
+\end{enumerate}
+\end{frame}
+
+% ============================================================
+\begin{frame}{目 次}
+\tableofcontents
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{波動関数の解釈}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{Bornの確率解釈}
+
+\teacher{波動関数$\Psi(x,t)$自体は直接測定できません。\\
+物理的な意味を持つのは$|\Psi|^2$です。}
+
+\vspace{0.3em}
+\textbf{確率密度：}
+\[
+  \rho(x,t) \equiv |\Psi(x,t)|^2 = \Psi(x,t)^*\Psi(x,t)
+\]
+
+\textbf{粒子がある範囲$[x_1, x_2]$における存在確率：}
+\[
+  P = \int_{x_1}^{x_2} \rho(x,t)\,dx = \int_{x_1}^{x_2} \Psi(x,t)^*\Psi(x,t)\,dx
+\]
+
+\teacher{複素共役$\Psi^*$を使う理由：$A = 1+i$なら$A^* = 1-i$，\\
+$|A|^2 = A^*A = 2$のように実数の正値が得られるためです。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{規格化}
+
+粒子は必ずどこかに存在する。つまり，粒子が運動する全領域の\\
+どこかに存在する確率は1である。
+
+\importantbox{
+  \textbf{規格化条件：}\quad $\displaystyle\int_\Omega \rho(x,t)\,dx = 1$
+  \quad $\Longleftrightarrow$ \quad
+  $\displaystyle\int_{-\infty}^{\infty} |\psi(x)|^2\,dx = 1$
+}
+
+\teacher{波動関数$\psi$に定数倍をかけて，この条件を満たすようにすることを\\
+\textbf{規格化}（normalization）と呼びます。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{期待値}
+
+状態量$x$を何度も観測したときの平均値を\textbf{期待値}という。
+
+\[
+  \langle\hat{x}\rangle \equiv \int_\Omega \Phi(x)^*\hat{x}\,\Phi(x)\,dx
+  = \int_\Omega \Phi(x)^*\,x\,\Phi(x)\,dx
+  = \int_\Omega x\rho(x)\,dx
+\]
+
+\teacher{一般の演算子$\hat{A}$に対しても：}
+\importantbox{
+  $\displaystyle \langle\hat{A}\rangle = \int \psi^*\hat{A}\,\psi\,dx$
+}
+
+\vspace{0.3em}
+{\small 例：井戸型ポテンシャル$\psi = \sqrt{2/a}\sin(n\pi x/a)$で\\
+$\langle\hat{x}\rangle = \int_0^a x\cdot|\psi|^2\,dx = \int_0^a \frac{2}{a}x\sin^2\!\left(\frac{n\pi x}{a}\right)dx$}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{量子力学の公理}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{量子力学の公理的まとめ}
+
+\begin{enumerate}
+  \item 量子力学的な粒子の運動状態は，座標$x$と時間$t$の\\
+    波動関数$\Psi(x,t)$によって決まる。\\
+    状態の全ての情報は波動関数から導かれる。
+
+  \vspace{0.5em}
+  \item 古典力学における物理量に対応する\textbf{線形演算子}が存在する。
+
+    \vspace{0.3em}
+    \begin{tabular}{cccc}
+      運動量 & 位置 & エネルギー & ハミルトニアン \\
+      $\hat{p} = -i\hbar\partial_x$ & $\hat{x} = x$ & $\hat{E} = i\hbar\partial_t$ & $\hat{H} = \hat{T} + \hat{V}$
+    \end{tabular}
+
+  \vspace{0.5em}
+  \item 物理量の測定値は，対応する演算子の\textbf{固有値}のいずれかである。
+    \[
+      \hat{A}\psi_n = a_n\psi_n
+    \]
+
+  \vspace{0.3em}
+  \item 測定の期待値：$\langle\hat{A}\rangle = \int\psi^*\hat{A}\,\psi\,dx$
+\end{enumerate}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{調和振動子の詳細}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{期待値の計算に必要な積分}
+
+\teacher{井戸型ポテンシャルの期待値$\langle\hat{x}\rangle$を求めるには\\
+$\int x\sin^2 x\,dx$という積分を計算する必要があります。}
+
+\vspace{0.3em}
+\textbf{部分積分法：}
+\[
+  \int f(x)g'(x)\,dx = f(x)g(x) - \int f'(x)g(x)\,dx
+\]
+
+\textbf{半角公式：}$\sin^2 x = \dfrac{1 - \cos 2x}{2}$ を使うと：
+
+\[
+  \int x\sin^2 x\,dx = \int x\cdot\frac{1-\cos 2x}{2}\,dx
+  = \frac{1}{2}\int x(1-\cos 2x)\,dx
+\]
+
+\teacher{部分積分で$f(x) = x$，$g'(x) = 1-\cos 2x$，\\
+$g(x) = x - \frac{1}{2}\sin 2x$とすれば計算できます。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{調和振動子と分子振動}
+
+\begin{columns}[c]
+\begin{column}{0.45\textwidth}
+  \begin{tikzpicture}[scale=0.7]
+    % Spring-mass system
+    \draw[very thick] (-0.3,0) -- (-0.3,2);
+    \draw[decorate, decoration={coil, segment length=5pt, amplitude=4pt}]
+      (-0.3,1) -- (2,1);
+    \fill (2,0.6) rectangle (2.6,1.4);
+    \node[below] at (2.3,0.5) {$m$};
+    \node[below] at (0.85,0.5) {$k$};
+  \end{tikzpicture}
+
+  \vspace{0.3em}
+  バネ定数を$k$とする。\\
+  ハミルトニアン：
+  \[
+    H = \frac{1}{2m}p^2 + \frac{1}{2}kx^2
+  \]
+\end{column}
+\begin{column}{0.55\textwidth}
+  \textbf{二原子分子の伸縮運動（分子振動）}
+
+  \vspace{0.3em}
+  換算質量：$\mu = \dfrac{m_1 m_2}{m_1 + m_2}$
+
+  \vspace{0.3em}
+  \textbf{Schrödinger方程式：}
+  \[
+    E\Psi(x) = \left[-\frac{\hbar^2}{2\mu}\frac{d^2}{dx^2} + \frac{1}{2}kx^2\right]\Psi(x)
+  \]
+\end{column}
+\end{columns}
+
+\vspace{0.3em}
+\teacher{演算子に置き換え：$\hat{H} = \frac{1}{2m}\hat{p}^2 + \frac{1}{2}k\hat{x}^2$}
+\end{frame}
+
+% ============================================================
+\begin{frame}{無次元化と解の構造}
+
+\textbf{無次元変数の導入：}
+\[
+  \alpha^4 = \frac{\hbar^2}{k\mu}, \quad
+  \varepsilon = \frac{2\alpha^2\mu E}{\hbar^2}, \quad
+  x = \alpha y, \quad
+  \Phi(y) = \Phi(x/\alpha) = \Psi(x)
+\]
+
+Schrödinger方程式は次のように簡潔になる：
+
+\importantbox{
+  $\dfrac{d^2\Phi(y)}{dy^2} + (\varepsilon - y^2)\Phi(y) = 0$
+}
+
+\teacher{これは$f''(x) + (a - x^2)f(x) = 0$型の微分方程式で，\\
+解はガウス関数$\times$多項式の形になります。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{解：Hermite多項式}
+
+\importantbox{
+  $\Phi_n(y) = N_n\exp(-y^2/2)\,H_n(y)$\\[6pt]
+  $E_n = \left(n + \dfrac{1}{2}\right)\hbar\sqrt{\dfrac{k}{\mu}}
+       = \left(n + \dfrac{1}{2}\right)h\nu_0$, \quad
+  $\nu_0 \equiv \dfrac{1}{2\pi}\sqrt{\dfrac{k}{\mu}}$
+}
+
+規格化係数：$N_n = \left[\dfrac{1}{2^n n!\,\alpha\sqrt{\pi}}\right]^{1/2}$
+
+\vspace{0.3em}
+\textbf{Hermite多項式：}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+  $H_0(y) = 1$ \\
+  $H_2(y) = 4y^2 - 2$ \\
+  $H_4(y) = 16y^4 - 48y^2 + 12$
+\end{column}
+\begin{column}{0.5\textwidth}
+  $H_1(y) = 2y$ \\
+  $H_3(y) = 8y^3 - 12y$ \\
+  $H_5(y) = 32y^5 - 160y^3 + 120y$
+\end{column}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{規格化の実行（$n = 1$の例）}
+
+$\Phi_1(y) = N_1 \cdot 2y \cdot \exp(-y^2/2)$ の規格化：
+
+\[
+  \int_{-\infty}^{\infty}\Psi_n(x)^*\Psi_n(x)\,dx = 1
+  \quad \to \quad
+  \int_{-\infty}^{\infty}\Phi_n(y)^*\Phi_n(y)\,(\alpha\,dy) = 1
+\]
+
+\[
+  4N_1^2\alpha\int_{-\infty}^{\infty}y^2\exp(-y^2)\,dy = 1
+\]
+
+\teacher{$y^2\exp(-y^2)$は偶関数なので：}
+\[
+  2 \cdot 4N_1^2\alpha\int_0^{\infty}y^2\exp(-y^2)\,dy = 1
+\]
+
+\textbf{ガウス積分：}
+\begin{enumerate}
+  \item $\displaystyle\int_{-\infty}^{\infty}e^{-ax^2}dx = \sqrt{\frac{\pi}{a}}$
+  \qquad
+  \item[②] $\displaystyle\int_{-\infty}^{\infty}x^2 e^{-ax^2}dx = \frac{1}{2a}\sqrt{\frac{\pi}{a}}$
+\end{enumerate}
+\end{frame}
+
+% ============================================================
+\begin{frame}{規格化係数$N_1$の決定}
+
+$a = 1$として②を使うと：
+\[
+  \int_{-\infty}^{\infty}y^2\exp(-y^2)\,dy = \frac{1}{2}\sqrt{\pi}
+\]
+
+\[
+  4N_1^2\alpha \cdot \frac{1}{2}\sqrt{\pi} = 1
+  \quad \Longrightarrow \quad
+  2N_1^2\alpha\sqrt{\pi} = 1
+\]
+
+\importantbox{
+  $N_1 = \left(\dfrac{1}{2\alpha\sqrt{\pi}}\right)^{1/2}$
+}
+
+\teacher{一般の$N_n$も同様にHermite多項式の直交性を使って求められます。\\
+公式$N_n = [1/(2^n n!\,\alpha\sqrt{\pi})]^{1/2}$と一致することを確認してみてください。}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{球面調和関数と分子回転}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{二原子分子の回転}
+
+\teacher{振動の次は\textbf{回転}です。二原子分子を剛体回転子と見なします。}
+
+\vspace{0.3em}
+\begin{columns}[c]
+\begin{column}{0.5\textwidth}
+  換算質量：$\mu = \dfrac{m_1 m_2}{m_1 + m_2}$
+
+  \vspace{0.3em}
+  速度：$v = r\dfrac{d\theta}{dt}$，\quad $\theta$：回転角
+
+  \vspace{0.3em}
+  \textbf{慣性モーメント：}
+  \[
+    I = \mu r^2
+  \]
+\end{column}
+\begin{column}{0.5\textwidth}
+  \textbf{角運動量：}$\mathbf{L} = \mathbf{r}\times\mathbf{p}$
+  \begin{align}
+    L &= r\cdot p = r\cdot \mu v \notag\\
+      &= r\cdot\mu r\frac{d\theta}{dt}
+       = \mu r^2\frac{d\theta}{dt}
+       = I\frac{d\theta}{dt} \notag
+  \end{align}
+\end{column}
+\end{columns}
+
+\vspace{0.3em}
+\teacher{回転の運動エネルギーは$T = L^2/(2I)$。\\
+ポテンシャルなし（$V = 0$）なので$\hat{H} = \hat{\mathbf{L}}^2/(2I)$。}
+\end{frame}
+
+% ============================================================
+\begin{frame}[shrink=5]{球面調和関数}
+
+\[
+  \frac{\hat{\mathbf{L}}^2}{2I}\Psi(\mathbf{r}) = E\Psi(\mathbf{r}), \qquad
+  \hat{\mathbf{L}}^2 = -\hbar^2\left[
+    \frac{1}{\sin\theta}\frac{\partial}{\partial\theta}
+    \left(\sin\theta\frac{\partial}{\partial\theta}\right)
+    + \frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\phi^2}
+  \right]
+\]
+
+変数分離 → $\dfrac{\hat{\mathbf{L}}^2}{2I}Y(\theta,\phi) = EY(\theta,\phi)$
+
+\importantbox{
+  $Y_{J,m_J}(\theta,\phi) = A_{J,m_J}\,P_J^{|m_J|}(\cos\theta)\,\exp(im_J\phi)$\\[6pt]
+  $E_J = J(J+1)\dfrac{\hbar^2}{2I}$, \quad $J = 0,1,2,3,\ldots$
+}
+
+\textbf{具体例：}
+\begin{align}
+  Y_{0,0} &= \frac{1}{\sqrt{4\pi}}, \qquad
+  Y_{1,0} = \sqrt{\frac{3}{4\pi}}\cos\theta \notag\\
+  Y_{1,1} &= \sqrt{\frac{3}{8\pi}}\sin\theta\,e^{i\phi}, \qquad
+  Y_{1,-1} = \sqrt{\frac{3}{8\pi}}\sin\theta\,e^{-i\phi} \notag
+\end{align}
+\end{frame}
+
+% ============================================================
+\begin{frame}{球面調和関数の規格化確認}
+
+$Y_{0,0}$の規格化を確認してみましょう：
+
+\[
+  \int_{\theta=0}^{\pi}\int_{\phi=0}^{2\pi}|Y_{0,0}(\theta,\phi)|^2
+  \sin\theta\,d\theta\,d\phi
+  = \frac{1}{4\pi}\times
+  \underbrace{\int_0^{\pi}\sin\theta\,d\theta}_{=\,2}
+  \times
+  \underbrace{\int_0^{2\pi}d\phi}_{=\,2\pi}
+  = \frac{1}{4\pi}\times 2 \times 2\pi = 1 \;\checkmark
+\]
+
+\teacher{球面座標での積分では体積要素$\sin\theta\,d\theta\,d\phi$を忘れずに！\\
+3次元の場合は$r^2\sin\theta\,dr\,d\theta\,d\phi$です。}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{水素原子}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{水素原子のSchrödinger方程式}
+
+\teacher{陽子と電子の2体問題を換算質量で1体問題に帰着させます。}
+
+\vspace{0.3em}
+$\mu = \dfrac{m_e m_p}{m_e + m_p}$（陽子と電子の換算質量）
+
+\vspace{0.3em}
+\textbf{ハミルトニアン：}運動エネルギー＋クーロンポテンシャル
+\[
+  H = \frac{\mathbf{p}^2}{2\mu} - \frac{e^2}{4\pi\varepsilon_0}\frac{1}{r}
+\]
+
+\[
+  \left[-\frac{\hbar^2}{2\mu}\nabla^2 - \frac{e^2}{4\pi\varepsilon_0}\frac{1}{r}\right]\Psi(\mathbf{r})
+  = E\Psi(\mathbf{r}), \qquad
+  r = \sqrt{x^2 + y^2 + z^2}
+\]
+
+\teacher{$\nabla^2$を極座標に変換して，角度部分$\hat{\mathbf{L}}^2$を分離します。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{極座標への変換}
+
+\[
+  \nabla^2 = \frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}
+  = \frac{1}{r^2}\frac{\partial}{\partial r}\!\left(r^2\frac{\partial}{\partial r}\right)
+  + \frac{1}{r^2}\!\left[
+    \frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\!\left(\sin\theta\frac{\partial}{\partial\theta}\right)
+    + \frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\phi^2}
+  \right]
+\]
+
+$\hat{\mathbf{L}}^2$の定義を使うと：
+\[
+  -\frac{\hbar^2}{2\mu}\nabla^2
+  = -\frac{\hbar^2}{2\mu}\left(\frac{2}{r}\frac{\partial}{\partial r}
+    + \frac{\partial^2}{\partial r^2}\right)
+  + \frac{\hat{\mathbf{L}}^2}{2\mu r^2}
+\]
+
+\importantbox{
+  $\left[-\frac{\hbar^2}{2\mu}\frac{1}{r^2}\frac{\partial}{\partial r}\!\left(r^2\frac{\partial}{\partial r}\right)
+  + \frac{\hat{\mathbf{L}}^2(\theta,\phi)}{2\mu r^2}
+  - \frac{e^2}{4\pi\varepsilon_0 r}\right]\Psi(r,\theta,\phi) = E\Psi(r,\theta,\phi)$
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{水素原子の波動関数}
+
+変数分離$\Psi = R(r)\cdot Y(\theta,\phi)$で\textbf{動径波動関数}と\textbf{球面調和関数}に分離：
+
+\vspace{0.3em}
+\begin{align}
+  \Psi_{100} &= R_{10}(r)Y_{00}(\theta,\phi)
+  = \frac{1}{\sqrt{\pi}}\left[\frac{1}{a_0}\right]^{3/2}
+  \exp\!\left[-\frac{r}{a_0}\right] \notag\\[6pt]
+  \Psi_{200} &= R_{20}(r)Y_{00}(\theta,\phi)
+  = \frac{1}{4\sqrt{2\pi}}\left[\frac{1}{a_0}\right]^{3/2}
+  \left[2 - \frac{r}{a_0}\right]\exp\!\left[-\frac{r}{2a_0}\right] \notag\\[6pt]
+  \Psi_{210} &= R_{21}(r)Y_{10}(\theta,\phi)
+  = \frac{1}{4\sqrt{2\pi}}\frac{1}{a_0}\left[\frac{1}{a_0}\right]^{3/2}
+  \left[\frac{r}{a_0}\right]\exp\!\left[-\frac{r}{2a_0}\right]\cos\theta \notag
+\end{align}
+
+\teacher{$a_0$はBohr半径。添字$(n,l,m)$は3つの量子数に対応。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{量子数}
+
+\textbf{3つの量子数：}$n$（主），$l$（方位），$m$（磁気）
+
+\vspace{0.3em}
+\begin{tabular}{lcl}
+  $n = 1$ & → & $l = 0$ → $m = 0$ \\
+  \midrule
+  $n = 2$ & → & $l = 0$ → $m = 0$ \\
+          &   & $l = 1$ → $m = -1,\, 0,\, 1$ \\
+  \midrule
+  $n = 3$ & → & $l = 0$ → $m = 0$ \\
+          &   & $l = 1$ → $m = -1,\, 0,\, 1$ \\
+          &   & $l = 2$ → $m = -2,\, -1,\, 0,\, 1,\, 2$ \\
+\end{tabular}
+
+\vspace{0.3em}
+\importantbox{
+  $l = 0,1,\ldots,n-1$，\quad $m = -l, -l+1,\ldots, l-1, l$\\[4pt]
+  軌道の名前：$l = 0$（s），$l = 1$（p），$l = 2$（d），$l = 3$（f）
+}
+
+\teacher{$n$番目のシェルには合計$n^2$個の軌道が存在する。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{水素原子のエネルギー}
+
+\importantbox{
+  \[
+    E_n = -\frac{1}{2}\frac{\mu e^4}{(4\pi\varepsilon_0)^2\hbar^2}\frac{1}{n^2}
+    \approx -\frac{1}{2}\frac{m_e e^4}{(4\pi\varepsilon_0)^2\hbar^2}\frac{1}{n^2}
+  \]
+}
+
+水素原子はある安定状態から別の安定状態に遷移し，\\
+そのエネルギー差に対応する光子を吸収／放出する。
+
+\[
+  h\nu = |E_n - E_m| = \frac{1}{2}\frac{m_e e^4}{(4\pi\varepsilon_0)^2\hbar^2}
+  \left|\frac{1}{n^2} - \frac{1}{m^2}\right|
+\]
+
+波数に直すと：
+\importantbox{
+  $\dfrac{1}{\lambda} = R_\infty\left[\dfrac{1}{m^2} - \dfrac{1}{n^2}\right]$
+  \quad $(n > m > 0)$\\[4pt]
+  $R_\infty$：\textbf{リュードベリ定数}
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{水素原子のスペクトル系列}
+
+\begin{center}
+\begin{tabular}{lcl}
+  \toprule
+  系列名 & 下準位$m$ & 波長領域 \\
+  \midrule
+  ライマン系列 & $m = 1$ & 遠紫外線 \\
+  バルマー系列 & $m = 2$ & 可視光 \\
+  パッシェン系列 & $m = 3$ & 赤外線 \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+$n = 2,3,4,5,\ldots \to n = 1$の遷移がライマン系列（遠紫外線領域）
+
+$n = 3,4,5,\ldots \to n = 2$の遷移がバルマー系列（可視光領域）
+
+$n = 4,5,\ldots \to n = 3$の遷移がパッシェン系列（赤外線領域）
+
+\teacher{入試では「$n=3 \to n=2$の遷移波長を求めよ」の形で出題されます。\\
+$R_\infty = \SI{1.097e7}{m^{-1}}$を代入すれば計算できます。}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{階段ポテンシャル}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{階段ポテンシャル（$E > V_0$の場合）}
+
+\begin{columns}[c]
+\begin{column}{0.4\textwidth}
+  \begin{tikzpicture}[scale=0.65]
+    % Potential step
+    \fill[blue!8] (0,0) rectangle (4,2);
+    \draw[very thick, darkblue] (-3,0) -- (0,0) -- (0,2) -- (4,2);
+    \draw[->, thick] (-3,0) -- (4.5,0) node[right] {$x$};
+    \draw[->, thick] (0,-0.3) -- (0,3) node[above] {$V$};
+    \node[left] at (0,2) {$V_0$};
+    \node[below] at (0,-0.1) {$0$};
+    % Energy line
+    \draw[dashed, alertred] (-3,2.5) -- (4,2.5) node[right] {$E$};
+    % Incident wave
+    \draw[->, accent, thick] (-2.5,1) -- (-1,1);
+    \node[above, accent] at (-1.75,1) {\small 入射波};
+  \end{tikzpicture}
+\end{column}
+\begin{column}{0.6\textwidth}
+  \textbf{領域1}（$x < 0$，$V = 0$）：
+  \[
+    \frac{d^2\psi}{dx^2} = -k_1^2\psi, \quad
+    k_1 = \frac{\sqrt{2mE}}{\hbar}
+  \]
+  $\psi_1(x) = Ae^{ik_1 x} + Be^{-ik_1 x}$
+
+  \vspace{0.3em}
+  \textbf{領域2}（$x \geq 0$，$V = V_0$）：
+  \[
+    \frac{d^2\psi}{dx^2} = -k_2^2\psi, \quad
+    k_2 = \frac{\sqrt{2m(E-V_0)}}{\hbar}
+  \]
+  $\psi_2(x) = Ce^{ik_2 x}$（透過波のみ，$D = 0$）
+\end{column}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{接続条件と反射率}
+
+\textbf{接続条件}（$x = 0$で波動関数が滑らかに接続）：
+
+\begin{enumerate}
+  \item $\psi_1(0) = \psi_2(0)$：\quad $A + B = C$
+  \item $\psi_1'(0) = \psi_2'(0)$：\quad $ik_1 A - ik_1 B = ik_2 C$
+\end{enumerate}
+
+\vspace{0.3em}
+これを解くと：
+\[
+  \frac{B}{A} = \frac{k_1 - k_2}{k_1 + k_2}, \qquad
+  \frac{C}{A} = \frac{2k_1}{k_1 + k_2}
+\]
+
+\importantbox{
+  \textbf{反射率：}\;$R = \dfrac{|B|^2}{|A|^2} = \left(\dfrac{k_1 - k_2}{k_1 + k_2}\right)^2$
+  \\[8pt]
+  \textbf{透過率：}\;$T = 1 - R = \dfrac{4k_1 k_2}{(k_1 + k_2)^2}$
+}
+
+\teacher{古典力学では$E > V_0$なら100\%透過。\\
+量子力学では\alert{量子反射}が起こる！}
+\end{frame}
+
+% ============================================================
+\begin{frame}{$E < V_0$の場合：トンネル効果}
+
+$E < V_0$のとき，$k_2$は虚数：$k_2 = i\alpha$，$\alpha = \sqrt{2m(V_0 - E)}/\hbar$
+
+\[
+  \psi_1(x) = Ae^{ik_1 x} + Be^{-ik_1 x} \quad (x < 0)
+\]
+\[
+  \psi_2(x) = Ce^{-\alpha x} \quad (x \geq 0)
+\]
+{\small （$De^{+\alpha x}$は$x \to +\infty$で発散するので$D = 0$）}
+
+\vspace{0.3em}
+接続条件：$\dfrac{B}{A} = \dfrac{k_1 - i\alpha}{k_1 + i\alpha}$，\quad
+$\dfrac{C}{A} = \dfrac{2k_1}{k_1 + i\alpha}$
+
+\importantbox{
+  $R = \dfrac{|B|^2}{|A|^2} = \dfrac{k_1^2 + \alpha^2}{k_1^2 + \alpha^2} = 1$\\[6pt]
+  → 全反射！しかし$\psi_2 = Ce^{-\alpha x} \neq 0$（\alert{しみ出し}がある）
+}
+
+\teacher{有限幅の障壁なら，しみ出しが反対側に到達 → \textbf{トンネル効果}}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{変分法}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}{変分法の考え方}
+
+\teacher{厳密解が求まらない系では，\textbf{変分法}で近似解を求めます。}
+
+\vspace{0.3em}
+$\hat{H}\psi = E\psi$の両辺に左から$\psi^*$をかけて積分すると：
+
+\importantbox{
+  $E = \dfrac{\int\psi^*\hat{H}\psi\,d\tau}{\int\psi^*\psi\,d\tau}$
+  \quad（\textbf{Rayleigh商}）
+}
+
+\vspace{0.3em}
+\textbf{変分原理：}試行関数$\psi$で計算したエネルギーは\\
+常に真の基底状態エネルギー以上になる。
+
+\teacher{試行関数のパラメータを変えてエネルギーを最小化すれば，\\
+最良の近似解が得られます。}
+\end{frame}
+
+% ============================================================
+\begin{frame}{LCAO近似}
+
+\textbf{試行関数}を原子軌道の線形結合（LCAO）で構成する：
+
+\[
+  \psi = C_A\psi_A + C_B\psi_B
+\]
+
+\vspace{0.3em}
+\textbf{直交規格化条件：}
+\[
+  \int\psi_A^*\psi_A = 1, \quad
+  \int\psi_B^*\psi_B = 1, \quad
+  \int\psi_A^*\psi_B = \int\psi_A\psi_B = 0
+\]
+
+{\small （実関数の場合：$\int\psi_A\psi_B = 0$）}
+
+\vspace{0.3em}
+\teacher{$\psi_A$と$\psi_B$は異なる原子上の原子軌道です。\\
+これが分子軌道法の出発点になります。}
+\end{frame}
+
+% ============================================================
+\begin{frame}[shrink=5]{エネルギーの変分式}
+
+$\psi = C_A\psi_A + C_B\psi_B$を$E = \int\psi^*\hat{H}\psi\,d\tau / \int\psi^*\psi\,d\tau$に代入すると：
+
+\textbf{記号の定義：}
+\begin{itemize}
+  \item $\alpha_A = \int\psi_A\hat{H}\psi_A\,d\tau$，\;
+        $\alpha_B = \int\psi_B\hat{H}\psi_B\,d\tau$
+        \quad（\textbf{クーロン積分}）
+  \item $\beta = \int\psi_B\hat{H}\psi_A\,d\tau = \int\psi_A\hat{H}\psi_B\,d\tau$
+        \quad（\textbf{共鳴積分}）
+  \item $S = \int\psi_A\psi_B\,d\tau$
+        \quad（\textbf{重なり積分}）
+\end{itemize}
+
+\importantbox{
+  $E = \dfrac{C_A^2\alpha_A + C_B^2\alpha_B + 2C_A C_B\beta}
+             {C_A^2 + C_B^2 + 2C_A C_B S}$
+}
+
+\teacher{$\partial E/\partial C_A = 0$，$\partial E/\partial C_B = 0$として\\
+$C_A$，$C_B$を最適化 → 永年方程式 → 結合性・反結合性軌道}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{まとめ}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ============================================================
+\begin{frame}[shrink=5]{全体のまとめ}
+
+\begin{enumerate}
+  \item \textbf{波動関数の解釈}\\
+    $|\psi|^2$ = 確率密度，規格化$\int|\psi|^2 dx = 1$，期待値$\langle\hat{A}\rangle = \int\psi^*\hat{A}\psi\,dx$
+
+  \item \textbf{調和振動子の詳細}\\
+    $\Phi_n = N_n e^{-y^2/2}H_n(y)$，ガウス積分で規格化
+
+  \item \textbf{球面調和関数と分子回転}\\
+    $E_J = J(J+1)\hbar^2/(2I)$，球面調和関数$Y_{J,m_J}(\theta,\phi)$
+
+  \item \textbf{水素原子}\\
+    $E_n \propto -1/n^2$，量子数$(n,l,m)$，スペクトル系列
+
+  \item \textbf{階段ポテンシャル}\\
+    量子反射，トンネル効果（しみ出し）
+
+  \item \textbf{変分法}\\
+    LCAO近似，クーロン積分$\alpha$，共鳴積分$\beta$，重なり積分$S$
+\end{enumerate}
+\end{frame}
+
+% ============================================================
+\begin{frame}[shrink=5]{入試対策チェックリスト}
+
+\begin{block}{これができれば合格ラインです：}
+  {\small
+  \begin{tabular}{cl}
+    $\square$ & 期待値$\langle\hat{x}\rangle$の計算（部分積分・半角公式） \\
+    $\square$ & 調和振動子のHermite多項式と規格化（ガウス積分） \\
+    $\square$ & 球面調和関数$Y_{J,m_J}$の規格化確認 \\
+    $\square$ & 水素原子の量子数$(n,l,m)$の関係と軌道名 \\
+    $\square$ & リュードベリ定数を使ったスペクトル波長の計算 \\
+    $\square$ & 階段ポテンシャルの反射率・透過率の導出 \\
+    $\square$ & $E < V_0$でのしみ出しとトンネル効果の説明 \\
+    $\square$ & 変分法のエネルギー式（クーロン・共鳴・重なり積分） \\
+  \end{tabular}
+  }
+\end{block}
+\end{frame}
+
+% ============================================================
+\begin{frame}[standout]
+  頑張れ！
+\end{frame}
+
+\end{document}

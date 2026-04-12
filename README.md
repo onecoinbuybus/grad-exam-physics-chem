@@ -7,12 +7,13 @@
 | フォルダ | 内容 |
 |---------|------|
 | `物理化学6/` | 量子化学の基礎（Schrödinger方程式・井戸型ポテンシャル） |
+| `物理化学7/` | 量子化学の展開（調和振動子・回転・水素原子・変分法） |
 
 ## コンパイル方法
 
 ```bash
 cd 物理化学6
-xelatex main.tex
+lualatex main.tex
 ```
 
 または Overleaf で "Import from GitHub" → XeLaTeX でコンパイル。
