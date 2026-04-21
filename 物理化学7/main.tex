@@ -501,26 +501,40 @@ $a = 1$として②を使うと：
 \end{frame}
 
 % ============================================================
-\begin{frame}{$E < V_0$の場合：しみ出し}
+\begin{frame}{$E < V_0$：セットアップ（波数が虚数に）}
 
-$E < V_0$のとき，領域2では$k_2$が虚数になる。\\
-$\alpha \equiv \sqrt{2m(V_0 - E)}/\hbar$と置くと：
+$E < V_0$のとき，領域2では$k_2 = \sqrt{2m(E-V_0)}/\hbar$が\textbf{虚数}になる．\\
+そこで実数の減衰定数$\alpha$を定義：
 
+\importantbox{
+  $\alpha \equiv \dfrac{\sqrt{2m(V_0 - E)}}{\hbar}$
+  \quad（$\alpha > 0$，実数）
+}
+
+\textbf{各領域の波動関数：}
 \[
   \psi_1(x) = Ae^{ik_1 x} + Be^{-ik_1 x} \quad (x < 0)
 \]
 \[
   \psi_2(x) = Ce^{-\alpha x} \quad (x \geq 0)
 \]
-{\small （$De^{+\alpha x}$は$x \to +\infty$で発散 → $D = 0$）}
+
+\teacher{領域2で$De^{+\alpha x}$の項は$x\to+\infty$で発散するため除外（$D = 0$）．\\
+つまり「無限遠で波動関数は収束」という物理的要請が境界条件．}
+\end{frame}
+
+% ============================================================
+\begin{frame}{全反射の導出（$R = 1$）}
+
+接続条件（$\psi, \psi'$の連続）を解くと：
+\[
+  \dfrac{B}{A} = \dfrac{k_1 - i\alpha}{k_1 + i\alpha}
+\]
 
 \vspace{0.3em}
-接続条件より：$\dfrac{B}{A} = \dfrac{k_1 - i\alpha}{k_1 + i\alpha}$
-
-\vspace{0.2em}
 複素数の絶対値$|a + ib|^2 = a^2 + b^2$を使うと：
 \[
-  \left|\dfrac{B}{A}\right|^2
+  R = \left|\dfrac{B}{A}\right|^2
   = \dfrac{|k_1 - i\alpha|^2}{|k_1 + i\alpha|^2}
   = \dfrac{k_1^2 + \alpha^2}{k_1^2 + \alpha^2} = 1
 \]
@@ -529,6 +543,9 @@ $\alpha \equiv \sqrt{2m(V_0 - E)}/\hbar$と置くと：
   $R = 1$\;→\;\textbf{全反射}\\[4pt]
   しかし$\psi_2 = Ce^{-\alpha x} \neq 0$：壁の中に波動関数が\alert{しみ出している}！
 }
+
+\teacher{古典力学では「$E<V_0$なら絶対に入れない」．\\
+量子力学では入れる（ただし指数的に減衰）．次のフレームでこれを可視化．}
 \end{frame}
 
 % ============================================================
