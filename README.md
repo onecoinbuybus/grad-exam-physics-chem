@@ -16,10 +16,10 @@ cd 物理化学6
 lualatex main.tex
 ```
 
-または Overleaf で "Import from GitHub" → XeLaTeX でコンパイル。
+または Overleaf で "Import from GitHub" → LuaLaTeX でコンパイル。
 
 ## Overleaf同期
 
 1. Overleaf → New Project → Import from GitHub
 2. このリポジトリを選択
-3. Menu → Compiler → **XeLaTeX** に設定
+3. Menu → Compiler → **LuaLaTeX** に設定（`luatexja` パッケージが必須のため XeLaTeX では通らない）
