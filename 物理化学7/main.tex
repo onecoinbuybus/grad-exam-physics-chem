@@ -1045,16 +1045,20 @@ Rayleigh商に代入すると$\int\psi^*\hat{H}\psi\,d\tau = \sum_n |c_n|^2 E_n$
 
 \textbf{戦略：}試行関数にパラメータ$\{c_1, c_2, \ldots\}$を仕込んで，$E$を\textbf{パラメータ空間で最小化}．
 
-\[
-  \frac{\partial E}{\partial c_i} = 0 \quad (\forall i)
-  \quad\Longrightarrow\quad
-  \text{そのパラメータ族の中での最良近似}
-\]
+\importantbox{
+  $\dfrac{\partial E}{\partial c_i} = 0 \quad (\forall i)$
+  \\[4pt]
+  → そのパラメータ族の中での\textbf{最良近似}
+}
 
-\vspace{0.3em}
-\textbf{イメージ：}
+\teacher{次のフレームで，この最小化を「グラフのイメージ」で確認します．}
+\end{frame}
+
+% ============================================================
+\begin{frame}{最小化のイメージ}
+
 \begin{center}
-\begin{tikzpicture}[scale=0.85]
+\begin{tikzpicture}[scale=0.95]
   \draw[->] (0,0) -- (7,0) node[right] {\small $c$（パラメータ）};
   \draw[->] (0,-0.3) -- (0,3) node[above] {\small $E[\psi(c)]$};
   \draw[thick, darkblue] plot[smooth, samples=100, domain=0.3:6.7]
@@ -1063,43 +1067,51 @@ Rayleigh商に代入すると$\int\psi^*\hat{H}\psi\,d\tau = \sum_n |c_n|^2 E_n$
   \node[left, alertred] at (0,0.7) {\small $E_\text{min}$};
   \draw[dashed, gray] (0,0.2) -- (6.7,0.2);
   \node[left, gray] at (0,0.2) {\small $E_0$};
-  \node[darkblue] at (5.2, 2.2) {\small $E[\psi(c)]$};
+  \node[darkblue] at (5.4, 2.4) {\small $E[\psi(c)]$};
   \draw[<->, thick, accent] (3.5,0.22) -- (3.5,0.68);
   \node[right, accent] at (3.55,0.45) {\small 誤差};
 \end{tikzpicture}
 \end{center}
 
-\vspace{-0.3em}
-\teacher{曲線の最下点が近似値，真の$E_0$との差（誤差）がパラメータ族の「限界」．\\
-次のLCAO近似では$c_A, c_B$が具体的なパラメータになる．}
+\teacher{曲線の最下点が近似値$E_\text{min}$，真の$E_0$との差（誤差）はパラメータ族の「限界」．\\
+次のLCAO近似では$C_A, C_B$が具体的なパラメータになる．}
 \end{frame}
 
 % ============================================================
-\begin{frame}{LCAO近似}
+\begin{frame}{LCAO近似：試行関数の組み立て}
 
-\textbf{試行関数}を原子軌道の線形結合（LCAO）で構成する：
+\textbf{分子軌道法の発想：}分子の軌道を，構成原子の原子軌道の\textbf{線形結合}で近似する．\\
+これが\textbf{LCAO（Linear Combination of Atomic Orbitals）近似}．
 
-\[
-  \psi = C_A\psi_A + C_B\psi_B
-\]
+\importantbox{
+  $\psi = C_A\psi_A + C_B\psi_B$
+  \\[4pt]
+  $\psi_A, \psi_B$：原子A・B上の原子軌道（既知）\\
+  $C_A, C_B$：変分パラメータ（最小化で決める）
+}
 
-\vspace{0.3em}
+\teacher{これで試行関数が「2つの数」で決まる形になりました．\\
+次のフレームで，規格化と重なり積分について確認します．}
+\end{frame}
+
+% ============================================================
+\begin{frame}{重なり積分 $S$}
+
 \textbf{各原子軌道は規格化されている：}
 \[
   \int\psi_A^*\psi_A\,d\tau = 1, \qquad
   \int\psi_B^*\psi_B\,d\tau = 1
 \]
 
-\textbf{一般に重なり積分$S \neq 0$：}
-\[
-  S \equiv \int\psi_A\psi_B\,d\tau \neq 0
-\]
+\vspace{0.3em}
+\textbf{重なり積分の定義：}
+\importantbox{
+  $S \equiv \displaystyle\int\psi_A\psi_B\,d\tau$
+  \quad（一般に$S \neq 0$）
+}
 
-{\small （異なる原子上の軌道は完全には直交しない。\\
-$S = 0$と近似する場合もあるが，以下では一般的な$S \neq 0$で議論する。）}
-
-\teacher{$\psi_A$と$\psi_B$は異なる原子上の原子軌道です。\\
-これが分子軌道法の出発点になります。}
+\teacher{異なる原子上の軌道は完全には直交しない（両原子の電子雲が空間的に重なる）．\\
+$S=0$と近似する場合もあるが，以下では$S \neq 0$で議論．}
 \end{frame}
 
 % ============================================================
@@ -1201,7 +1213,7 @@ $E_- = (\alpha-\beta)/(1-S)$の場合，永年方程式から$C_A = -C_B$．\\
 \end{frame}
 
 % ============================================================
-\begin{frame}{なぜ$\psi_-$は反結合性なのか}
+\begin{frame}{なぜ$\psi_-$は反結合性なのか（波の干渉の観点）}
 
 \textbf{鍵は核間領域での「逆位相」：}
 
@@ -1209,7 +1221,7 @@ $E_- = (\alpha-\beta)/(1-S)$の場合，永年方程式から$C_A = -C_B$．\\
   \item $\psi_A$と$\psi_B$が\alert{同符号}で重なる領域（結合性）\\
     → 波が\textbf{強め合う}（建設的干渉）→ 電子密度増加
   \item $\psi_A$と$\psi_B$が\alert{逆符号}で重なる領域（反結合性）\\
-    → 波が\textbf{打ち消し合う}（破壊的干渉）→ $|\psi|^2 = 0$ の節面
+    → 波が\textbf{打ち消し合う}（破壊的干渉）→ $|\psi|^2 = 0$の節面
 \end{itemize}
 
 \importantbox{
@@ -1217,28 +1229,72 @@ $E_- = (\alpha-\beta)/(1-S)$の場合，永年方程式から$C_A = -C_B$．\\
   → 核間に電子がいない → 正電荷の陽子同士が反発 → \textbf{不安定}
 }
 
-\vspace{0.3em}
-\textbf{エネルギーから見ると：}
-\[
-  E_- - \alpha = \frac{-(β+αS)}{1-S} > 0 \quad (\because \beta < 0,\; 0<S<1)
-\]
-つまり$\psi_-$は元の原子軌道$\alpha$より\alert{高い}エネルギー．
-
-\teacher{電子を$\psi_-$に入れると分子は原子よりも不安定になる → 「反結合性」の名の由来．\\
-記号は$\sigma^*$（星印は「反」の意）．}
+\teacher{次のフレームで，これをエネルギーの不等式で裏付けます．}
 \end{frame}
 
 % ============================================================
-\begin{frame}{MO波動関数と電子密度を見てみよう}
+\begin{frame}{エネルギーで裏付ける：$E_- > \alpha$}
 
-\begin{center}
-  \includegraphics[width=0.95\textwidth]{figures/mo_bonding.png}
-\end{center}
+\textbf{エネルギーから見ると：}$\psi_-$のエネルギーは原子軌道$\alpha$より高い：
+\[
+  E_- - \alpha
+  = \frac{\alpha - \beta}{1 - S} - \alpha
+  = \frac{-(\beta + \alpha S)}{1 - S}
+\]
 
-\vspace{-0.5em}
-{\small 上段：$\psi_\pm$ の実関数としての形。下段：電子密度$|\psi_\pm|^2$を「重なりなし」と比較。\\
-\teacher{$\psi_+$では核間に電子密度が\alert{増加} → 両核を引き寄せる。\\
-$\psi_-$では中心に\alert{節面}があり密度ゼロ → 結合に寄与しない。}}
+\importantbox{
+  $\beta < 0$，\; $0 < S < 1$，\; $\alpha < 0$ より，分子は正，分母は正\\[2pt]
+  → $E_- - \alpha > 0$，\; すなわち $E_- > \alpha > E_+$
+}
+
+\teacher{電子を$\psi_-$に入れると分子は原子よりも不安定になる\\
+→ だから「反結合性」．記号は\alert{$\sigma^*$}（星印は「反」の意）．}
+\end{frame}
+
+% ============================================================
+\begin{frame}{結合性軌道 $\psi_+$ の可視化}
+
+\begin{columns}[c]
+\begin{column}{0.68\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{figures/mo_bonding_only.png}
+\end{column}
+\begin{column}{0.32\textwidth}
+  \textbf{上段：}\\
+  $\psi_+$（実線）は\\
+  $\psi_A, \psi_B$を足し合わせて\\
+  核間で\alert{強め合う}．
+
+  \vspace{0.6em}
+  \textbf{下段：}\\
+  $|\psi_+|^2$は核間に\\
+  電子密度を\alert{積み上げる}\\
+  → 両核を引き付ける．
+\end{column}
+\end{columns}
+\end{frame}
+
+% ============================================================
+\begin{frame}{反結合性軌道 $\psi_-$ の可視化}
+
+\begin{columns}[c]
+\begin{column}{0.68\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{figures/mo_antibonding_only.png}
+\end{column}
+\begin{column}{0.32\textwidth}
+  \textbf{上段：}\\
+  $\psi_-$（実線）は\\
+  中点で符号が反転．\\
+  \alert{節}（$\psi = 0$）．
+
+  \vspace{0.6em}
+  \textbf{下段：}\\
+  核間に\alert{節面}．\\
+  電子密度ゼロ\\
+  → 結合に寄与しない．
+\end{column}
+\end{columns}
 \end{frame}
 
 % ============================================================
